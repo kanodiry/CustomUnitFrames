@@ -21,10 +21,10 @@ local function ChangeUnitHealthBarText(self)
 
   -- Set the font and text of the health bar frame's text string
   self.TextString:SetFont(self.TextString:GetFont(), 13, "OUTLINE")
-  if health ~= 0 then
-    self.TextString:SetText(healthStr.." / "..healthMaxStr.." "..healthPercent.."%")
-  else
+  if health == 0 and self.unit == "player" then
     self.TextString:SetText("")
+  else
+    self.TextString:SetText(healthStr.." / "..healthMaxStr.." "..healthPercent.."%")
   end
 end
 
