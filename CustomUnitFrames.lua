@@ -21,7 +21,11 @@ local function ChangeUnitHealthBarText(self)
 
   -- Set the font and text of the health bar frame's text string
   self.TextString:SetFont(self.TextString:GetFont(), 13, "OUTLINE")
-  self.TextString:SetText(healthStr.." / "..healthMaxStr.." "..healthPercent.."%")
+  if health ~= 0 then
+    self.TextString:SetText(healthStr.." / "..healthMaxStr.." "..healthPercent.."%")
+  else
+    self.TextString:SetText("")
+  end
 end
 
 -- Replaces the default mana bar text with an abbreviated number and percentage

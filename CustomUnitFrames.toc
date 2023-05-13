@@ -1,7 +1,7 @@
 ## Interface: 30401
 ## Title: CustomUnitFrames
 ## Author: kanodiry
-## Version: 1.0.1
+## Version: 1.0.2
 ## Notes: Change UnitFrames texts to format: <Current> / <Total> <Percent%> and shorts big numbers with abbreviated units.
 
 CustomUnitFrames.lua
