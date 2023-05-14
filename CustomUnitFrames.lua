@@ -2,7 +2,7 @@
 -- @param value The number to convert
 -- @return The abbreviated string representation of the number
 local function NumToStrConverterBlizzard(value)
-  if value < 1000000 then
+  if value < 100000 then
     return tostring(value)
   else
     return string.format("%.0fT", value / 1000)
@@ -21,10 +21,15 @@ local function ChangeUnitHealthBarText(self)
 
   -- Set the font and text of the health bar frame's text string
   self.TextString:SetFont(self.TextString:GetFont(), 13, "OUTLINE")
-  if health == 0 and self ~= PlayerFrameHealthBar then
-    self.TextString:SetText("")
+
+  if health ~= 0 or self == PlayerFrameHealthBar then
+    if healthMax <= 100 then
+      self.TextString:SetText(healthStr.." / "..healthMaxStr)
+    else
+      self.TextString:SetText(healthStr.." / "..healthMaxStr.." "..healthPercent.."%")
+    end
   else
-    self.TextString:SetText(healthStr.." / "..healthMaxStr.." "..healthPercent.."%")
+    self.TextString:SetText("")
   end
 end
 
@@ -40,7 +45,12 @@ local function ChangeUnitManaBarText(self)
 
   -- Set the font and text of the mana bar frame's text string
   self.TextString:SetFont(self.TextString:GetFont(), 13, "OUTLINE")
-  self.TextString:SetText(manaStr.." / "..manaMaxStr.." "..manaPercent.."%")
+
+  if manaMax <= 250 then
+    self.TextString:SetText(manaStr.." / "..manaMaxStr)
+  else
+    self.TextString:SetText(manaStr.." / "..manaMaxStr.." "..manaPercent.."%")
+  end
 end
 
 -- Hooks the custom text functions into the default Blizzard health and mana bar updates

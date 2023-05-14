@@ -1,4 +1,4 @@
-## Interface: 100100
+## Interface: 30401
 ## Title: CustomUnitFrames
 ## Author: kanodiry
 ## Version: 1.0.4
