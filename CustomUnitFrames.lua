@@ -13,99 +13,11 @@ CUFFrame:RegisterEvent("ADDON_LOADED")
 CUFFrame:SetScript("OnEvent", CUFFrame.Init)
 
 local function NumToStrConverterBlizzard(value)
-  if value < 100000 then
-    return tostring(value)
-  else
-    return string.format("%.0fT", value / 1000)
-  end
-end
-
-local function ChangeUnitHealthBarText(self)
-  local health = UnitHealth(self.unit)
-  local healthMax = UnitHealthMax(self.unit)
-  local healthPercent = math.floor(health / healthMax * 100 + 0.5)
-
-  local healthStr = NumToStrConverterBlizzard(health)
-  local healthMaxStr = NumToStrConverterBlizzard(healthMax)
-
-  -- Set the font and text of the health bar frame's text string
-  self.TextString:SetFont(self.TextString:GetFont(), 13, "OUTLINE")
-  --self.TextString:SetFont("Fonts/ARIALN.TTF", 13, "OUTLINE")
-  --self.TextString:SetFont("Fonts/skurri.ttf", 13, "OUTLINE")
-  --self.TextString:SetFont("Fonts/MORPHEUS.ttf", 13, "OUTLINE")
-  --self.TextString:SetFont("Fonts/FRIZQT__.ttf", 13, "OUTLINE")
-  
-
-  if health ~= 0 or self == PlayerFrameHealthBar then
-    if healthMax <= 100 then
-      self.TextString:SetText(healthStr.." / "..healthMaxStr)
-    else
-      self.TextString:SetText(healthStr.." / "..healthMaxStr.." "..healthPercent.."%")
-    end
-  else
-    self.TextString:SetText("")
-  end
-end
-
--- Replaces the default mana bar text with an abbreviated number and percentage
--- @param self The mana bar frame
-local function ChangeUnitManaBarText(self)
-  local mana = UnitPower(self.unit)
-  local manaMax = UnitPowerMax(self.unit)
-  local manaPercent = math.floor(mana / manaMax * 100 + 0.5)
-
-  local manaStr = NumToStrConverterBlizzard(mana)
-  local manaMaxStr = NumToStrConverterBlizzard(manaMax)
-
-  -- Set the font and text of the mana bar frame's text string
-  self.TextString:SetFont(self.TextString:GetFont(), 13, "OUTLINE")
-
-  if manaMax <= 250 then
-    self.TextString:SetText(manaStr.." / "..manaMaxStr)
-  else
-    self.TextString:SetText(manaStr.." / "..manaMaxStr.." "..manaPercent.."%")
-  end
-end
-
-function hookTextUpdate() 
-  hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(self)
-    if self == PlayerFrameHealthBar or self == TargetFrameHealthBar or self == FocusFrameHealthBar or self == PetFrameHealthBar then
-      ChangeUnitHealthBarText(self)
-    end
-    if self == PlayerFrameManaBar or self == TargetFrameManaBar or self == FocusFrameManaBar or self == PetFrameManaBar then
-      ChangeUnitManaBarText(self)
-    end
-  end)
-end
-
-
-
---[[ hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(self)
-  if CUFFrame.settings.globalEnabled == true then
-    if self == PlayerFrameHealthBar and CUFFrame.settings.playerFrameEnabled then
-      print("PlayerFrameHealthBar")
-      ChangeFrameHealthBarText(self)
-    end
-    if self == TargetFrameHealthBar and CUFFrame.settings.targetFrameEnabled then
-      print("TargetFrameHealthBar")
-      ChangeFrameHealthBarText(self)
-    end
-    if self == FocusFrameHealthBar and CUFFrame.settings.focusFrameEnabled then
-      print("FocusFrameHealthBar")
-      ChangeFrameHealthBarText(self)
-    end
-    if self == PetFrameHealthBar and CUFFrame.settings.petFrameEnabled then
-      print("PetFrameHealthBar")
-      ChangeFrameHealthBarText(self)
-    end
-  end
-end)
-
-local function NumToStrConverterBlizzard(value)
   if value < 1000 then
     return tostring(value)
   else
     return string.format("%.0fT", value / 1000)
+  end
 end
 
 local function NumToStrConverterMetric(value)
@@ -128,78 +40,715 @@ local function PercentAccuracy(value, accuracy)
   return string.format("%." .. accuracy .. "f", rounded_number)
 end
 
-local function ChangeFrameHealthBarText(self)
+function resetUnitFrameHealth(frame)
+  if not UnitExists(frame.unit) then
+    return
+  end
+  if UnitIsDeadOrGhost(frame.unit) and frame.unit ~= "player" then
+    return
+  end
+
+  local health = UnitHealth(frame.unit)
+  local healthMax = UnitHealthMax(frame.unit)
+  frame.TextString:SetFont(CUFFrame.defaults.defaultFrameFont, CUFFrame.defaults.defaultFrameFontSize, "OUTLINE")
+  frame.TextString:SetText(health.." / "..healthMax)
+end
+
+function resetUnitFramePower(frame)
+  if not UnitExists(frame.unit) then
+    return
+  end
+
+  local mana = UnitPower(frame.unit)
+  local manaMax = UnitPowerMax(frame.unit)
+  frame.TextString:SetFont(CUFFrame.defaults.defaultFrameFont, CUFFrame.defaults.defaultFrameFontSize, "OUTLINE")
+  frame.TextString:SetText(mana.." / "..manaMax)
+end
+
+function ChangePlayerFrameHealthBarText(self)
   local health = UnitHealth(self.unit)
   local healthMax = UnitHealthMax(self.unit)
-  local healthPercent = PercentAccuracy(health / healthMax, CUFFrame.settings.percentAccuracy).."%"
+  local healthPercent = PercentAccuracy(health / healthMax * 100, CUFFrame.settings.percentAccuracy).."%"
 
-  if health >= 1000 and CUFFrame.settings.bigNumber == 1 then
+  if health >= 1000 and CUFFrame.settings.bigNumbers == 1 then
     if CUFFrame.settings.selectedFormat == 1 then
-      local healthStr = NumToStrConverterBlizzard(health)
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
     elseif CUFFrame.settings.selectedFormat == 2 then
-      local healthMaxStr = NumToStrConverterMetric(healthMax)
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
     end
-  elseif health >= 10000 and CUFFrame.settings.bigNumber == 2 then
+  elseif health >= 10000 and CUFFrame.settings.bigNumbers == 2 then
     if CUFFrame.settings.selectedFormat == 1 then
-      local healthStr = NumToStrConverterBlizzard(health)
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
     elseif CUFFrame.settings.selectedFormat == 2 then
-      local healthMaxStr = NumToStrConverterMetric(healthMax)
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
     end
-  elseif health >= 100000 and CUFFrame.settings.bigNumber == 3 then
+  elseif health >= 100000 and CUFFrame.settings.bigNumbers == 3 then
     if CUFFrame.settings.selectedFormat == 1 then
-      local healthStr = NumToStrConverterBlizzard(health)
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
     elseif CUFFrame.settings.selectedFormat == 2 then
-      local healthMaxStr = NumToStrConverterMetric(healthMax)
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
     end
-  elseif health >= 1000000 and CUFFrame.settings.bigNumber == 4 then
+  elseif health >= 1000000 and CUFFrame.settings.bigNumbers == 4 then
     if CUFFrame.settings.selectedFormat == 1 then
-      local healthStr = NumToStrConverterBlizzard(health)
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
     elseif CUFFrame.settings.selectedFormat == 2 then
-      local healthMaxStr = NumToStrConverterMetric(healthMax)
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
     end
   else
-    local healthStr = tostring(health)
+    healthStr = tostring(health)
+    healthMaxStr = tostring(healthMax)
   end
 
-  if healthMax >= 1000 and CUFFrame.settings.bigNumber == 1 then
-    if CUFFrame.settings.selectedFormat == 1 then
-      local healthMaxStr = NumToStrConverterBlizzard(healthMax)
-    elseif CUFFrame.settings.selectedFormat == 2 then
-      local healthMaxStr = NumToStrConverterMetric(healthMax)
-    end
-  elseif healthMax >= 10000 and CUFFrame.settings.bigNumber == 2 then
-    if CUFFrame.settings.selectedFormat == 1 then
-      local healthMaxStr = NumToStrConverterBlizzard(healthMax)
-    elseif CUFFrame.settings.selectedFormat == 2 then
-      local healthMaxStr = NumToStrConverterMetric(healthMax)
-    end
-  elseif healthMax >= 100000 and CUFFrame.settings.bigNumber == 3 then
-    if CUFFrame.settings.selectedFormat == 1 then
-      local healthMaxStr = NumToStrConverterBlizzard(healthMax)
-    elseif CUFFrame.settings.selectedFormat == 2 then
-      local healthMaxStr = NumToStrConverterMetric(healthMax)
-    end
-  elseif healthMax >= 1000000 and CUFFrame.settings.bigNumber == 4 then
-    if CUFFrame.settings.selectedFormat == 1 then
-      local healthMaxStr = NumToStrConverterBlizzard(healthMax)
-    elseif CUFFrame.settings.selectedFormat == 2 then
-      local healthMaxStr = NumToStrConverterMetric(healthMax)
-    end
-  else
-    local healthMaxStr = tostring(healthMax)
-  end
+  local resultStr = ""
 
-  self.TextString:SetFont(self.TextString:GetFont(), 13, "OUTLINE")
-  
-  if health ~= 0 or self == PlayerFrameHealthBar then
-    if healthMax <= 100 then
-      self.TextString:SetText(healthStr.." / "..healthMaxStr)
+  if CUFFrame.settings.playerFrameHPcurrentEnabled == true then
+    resultStr = resultStr..healthStr
+  end
+  if CUFFrame.settings.playerFrameHPmaxEnabled == true then
+    if resultStr ~= "" then
+      resultStr = resultStr.." / "..healthMaxStr
     else
-      self.TextString:SetText(healthStr.." / "..healthMaxStr.." "..healthPercent)
+      resultStr = healthMaxStr
     end
-  else
-    self.TextString:SetText("")
+  end
+  if CUFFrame.settings.playerFrameHPpercentEnabled == true then
+    if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+      if resultStr ~= "" then
+        resultStr = resultStr.." "..healthPercent
+      else
+        resultStr = healthPercent
+      end
+    end
   end
 
+  if CUFFrame.settings.selectedFont == "skurri" then
+    self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "morpheus" then
+    self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "frizqt" then
+    self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  else
+    self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
   end
-end ]]
+
+  self.TextString:SetText(resultStr)
+end
+
+function ChangeTargetFrameHealthBarText(self)
+  if not UnitExists(self.unit) then
+    return
+  end
+  if UnitIsDeadOrGhost(self.unit) then
+    return
+  end
+
+  local health = UnitHealth(self.unit)
+  local healthMax = UnitHealthMax(self.unit)
+  local healthPercent = PercentAccuracy(health / healthMax * 100, CUFFrame.settings.percentAccuracy).."%"
+
+  if health >= 1000 and CUFFrame.settings.bigNumbers == 1 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  elseif health >= 10000 and CUFFrame.settings.bigNumbers == 2 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  elseif health >= 100000 and CUFFrame.settings.bigNumbers == 3 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  elseif health >= 1000000 and CUFFrame.settings.bigNumbers == 4 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  else
+    healthStr = tostring(health)
+    healthMaxStr = tostring(healthMax)
+  end
+
+  local resultStr = ""
+
+  if CUFFrame.settings.targetFrameHPcurrentEnabled == true then
+    resultStr = resultStr..healthStr
+  end
+  if CUFFrame.settings.targetFrameHPmaxEnabled == true then
+    if resultStr ~= "" then
+      resultStr = resultStr.." / "..healthMaxStr
+    else
+      resultStr = healthMaxStr
+    end
+  end
+  if UnitIsPlayer(self.unit) and healthMax == 100 and CUFFrame.settings.showPercentForClassicPlayers == false then
+  else
+    if CUFFrame.settings.targetFrameHPpercentEnabled == true then
+      if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+        if resultStr ~= "" then
+          resultStr = resultStr.." "..healthPercent
+        else
+          resultStr = healthPercent
+        end
+      end
+    end
+  end
+
+  if CUFFrame.settings.selectedFont == "skurri" then
+    self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "morpheus" then
+    self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "frizqt" then
+    self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  else
+    self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+  end
+
+  self.TextString:SetText(resultStr)
+end
+
+function ChangeFocusFrameHealthBarText(self)
+  if not UnitExists(self.unit) then
+    return
+  end
+  if UnitIsDeadOrGhost(self.unit) then
+    return
+  end
+
+  local health = UnitHealth(self.unit)
+  local healthMax = UnitHealthMax(self.unit)
+  local healthPercent = PercentAccuracy(health / healthMax * 100, CUFFrame.settings.percentAccuracy).."%"
+
+  if health >= 1000 and CUFFrame.settings.bigNumbers == 1 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  elseif health >= 10000 and CUFFrame.settings.bigNumbers == 2 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  elseif health >= 100000 and CUFFrame.settings.bigNumbers == 3 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  elseif health >= 1000000 and CUFFrame.settings.bigNumbers == 4 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  else
+    healthStr = tostring(health)
+    healthMaxStr = tostring(healthMax)
+  end
+
+  local resultStr = ""
+
+  if CUFFrame.settings.focusFrameHPcurrentEnabled == true then
+    resultStr = resultStr..healthStr
+  end
+  if CUFFrame.settings.focusFrameHPmaxEnabled == true then
+    if resultStr ~= "" then
+      resultStr = resultStr.." / "..healthMaxStr
+    else
+      resultStr = healthMaxStr
+    end
+  end
+  if CUFFrame.settings.focusFrameHPpercentEnabled == true then
+    if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+      if resultStr ~= "" then
+        resultStr = resultStr.." "..healthPercent
+      else
+        resultStr = healthPercent
+      end
+    end
+  end
+
+  if CUFFrame.settings.selectedFont == "skurri" then
+    self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "morpheus" then
+    self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "frizqt" then
+    self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  else
+    self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+  end
+
+  self.TextString:SetText(resultStr)
+end
+
+function ChangePetFrameHealthBarText(self)
+  if not UnitExists(self.unit) then
+    return
+  end
+
+  local health = UnitHealth(self.unit)
+  local healthMax = UnitHealthMax(self.unit)
+  local healthPercent = PercentAccuracy(health / healthMax * 100, CUFFrame.settings.percentAccuracy).."%"
+
+  if health >= 1000 and CUFFrame.settings.bigNumbers == 1 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  elseif health >= 10000 and CUFFrame.settings.bigNumbers == 2 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  elseif health >= 100000 and CUFFrame.settings.bigNumbers == 3 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  elseif health >= 1000000 and CUFFrame.settings.bigNumbers == 4 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      healthStr = NumToStrConverterBlizzard(health)
+      healthMaxStr = NumToStrConverterBlizzard(healthMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      healthStr = NumToStrConverterMetric(health)
+      healthMaxStr = NumToStrConverterMetric(healthMax)
+    end
+  else
+    healthStr = tostring(health)
+    healthMaxStr = tostring(healthMax)
+  end
+
+  local resultStr = ""
+
+  if CUFFrame.settings.petFrameHPcurrentEnabled == true then
+    resultStr = resultStr..healthStr
+  end
+  if CUFFrame.settings.petFrameHPmaxEnabled == true then
+    if resultStr ~= "" then
+      resultStr = resultStr.." / "..healthMaxStr
+    else
+      resultStr = healthMaxStr
+    end
+  end
+  if CUFFrame.settings.petFrameHPpercentEnabled == true then
+    if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+      if resultStr ~= "" then
+        resultStr = resultStr.." "..healthPercent
+      else
+        resultStr = healthPercent
+      end
+    end
+  end
+
+  if CUFFrame.settings.selectedFont == "skurri" then
+    self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "morpheus" then
+    self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "frizqt" then
+    self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  else
+    self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+  end
+
+  self.TextString:SetText(resultStr)
+end
+
+function ChangePlayerFrameManaBarText(self)
+  local mana = UnitPower(self.unit)
+  local manaMax = UnitPowerMax(self.unit)
+  local manaPercent = PercentAccuracy(mana / manaMax * 100, CUFFrame.settings.percentAccuracy).."%"
+
+  if mana >= 1000 and CUFFrame.settings.bigNumbers == 1 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 10000 and CUFFrame.settings.bigNumbers == 2 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 100000 and CUFFrame.settings.bigNumbers == 3 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 1000000 and CUFFrame.settings.bigNumbers == 4 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  else
+    manaStr = tostring(mana)
+    manaMaxStr = tostring(manaMax)
+  end
+
+  local resultStr = ""
+
+  if CUFFrame.settings.playerFrameMPcurrentEnabled == true then
+    resultStr = resultStr..manaStr
+  end
+  if CUFFrame.settings.playerFrameMPmaxEnabled == true then
+    if resultStr ~= "" then
+      resultStr = resultStr.." / "..manaMaxStr
+    else
+      resultStr = manaMaxStr
+    end
+  end
+  if CUFFrame.settings.playerFrameMPpercentEnabled == true then
+    if manaMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+      if resultStr ~= "" then
+        resultStr = resultStr.." "..manaPercent
+      else
+        resultStr = manaPercent
+      end
+    end
+  end
+
+  if CUFFrame.settings.selectedFont == "skurri" then
+    self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "morpheus" then
+    self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "frizqt" then
+    self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  else
+    self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+  end
+
+  self.TextString:SetText(resultStr)
+end
+
+function ChangeTargetFrameManaBarText(self)
+  if not UnitExists(self.unit) then
+    return
+  end
+
+  local mana = UnitPower(self.unit)
+  local manaMax = UnitPowerMax(self.unit)
+  local manaPercent = PercentAccuracy(mana / manaMax * 100, CUFFrame.settings.percentAccuracy).."%"
+
+  if mana >= 1000 and CUFFrame.settings.bigNumbers == 1 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 10000 and CUFFrame.settings.bigNumbers == 2 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 100000 and CUFFrame.settings.bigNumbers == 3 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 1000000 and CUFFrame.settings.bigNumbers == 4 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  else
+    manaStr = tostring(mana)
+    manaMaxStr = tostring(manaMax)
+  end
+
+  local resultStr = ""
+
+  if CUFFrame.settings.targetFrameMPcurrentEnabled == true then
+    resultStr = resultStr..manaStr
+  end
+  if CUFFrame.settings.targetFrameMPmaxEnabled == true then
+    if resultStr ~= "" then
+      resultStr = resultStr.." / "..manaMaxStr
+    else
+      resultStr = manaMaxStr
+    end
+  end
+  if CUFFrame.settings.targetFrameMPpercentEnabled == true then
+    if manaMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+      if resultStr ~= "" then
+        resultStr = resultStr.." "..manaPercent
+      else
+        resultStr = manaPercent
+      end
+    end
+  end
+
+  if CUFFrame.settings.selectedFont == "skurri" then
+    self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "morpheus" then
+    self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "frizqt" then
+    self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  else
+    self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+  end
+
+  self.TextString:SetText(resultStr)
+end
+
+function ChangeFocusFrameManaBarText(self)
+  if not UnitExists(self.unit) then
+    return
+  end
+
+  local mana = UnitPower(self.unit)
+  local manaMax = UnitPowerMax(self.unit)
+  local manaPercent = PercentAccuracy(mana / manaMax * 100, CUFFrame.settings.percentAccuracy).."%"
+
+  if mana >= 1000 and CUFFrame.settings.bigNumbers == 1 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 10000 and CUFFrame.settings.bigNumbers == 2 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 100000 and CUFFrame.settings.bigNumbers == 3 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 1000000 and CUFFrame.settings.bigNumbers == 4 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  else
+    manaStr = tostring(mana)
+    manaMaxStr = tostring(manaMax)
+  end
+
+  local resultStr = ""
+
+  if CUFFrame.settings.focusFrameMPcurrentEnabled == true then
+    resultStr = resultStr..manaStr
+  end
+  if CUFFrame.settings.focusFrameMPmaxEnabled == true then
+    if resultStr ~= "" then
+      resultStr = resultStr.." / "..manaMaxStr
+    else
+      resultStr = manaMaxStr
+    end
+  end
+  if CUFFrame.settings.focusFrameMPpercentEnabled == true then
+    if manaMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+      if resultStr ~= "" then
+        resultStr = resultStr.." "..manaPercent
+      else
+        resultStr = manaPercent
+      end
+    end
+  end
+
+  if CUFFrame.settings.selectedFont == "skurri" then
+    self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "morpheus" then
+    self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "frizqt" then
+    self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  else
+    self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+  end
+
+  self.TextString:SetText(resultStr)
+end
+
+function ChangePetFrameManaBarText(self)
+  if not UnitExists(self.unit) then
+    return
+  end
+
+  local mana = UnitPower(self.unit)
+  local manaMax = UnitPowerMax(self.unit)
+  local manaPercent = PercentAccuracy(mana / manaMax * 100, CUFFrame.settings.percentAccuracy).."%"
+
+  if mana >= 1000 and CUFFrame.settings.bigNumbers == 1 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 10000 and CUFFrame.settings.bigNumbers == 2 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 100000 and CUFFrame.settings.bigNumbers == 3 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  elseif mana >= 1000000 and CUFFrame.settings.bigNumbers == 4 then
+    if CUFFrame.settings.selectedFormat == 1 then
+      manaStr = NumToStrConverterBlizzard(mana)
+      manaMaxStr = NumToStrConverterBlizzard(manaMax)
+    elseif CUFFrame.settings.selectedFormat == 2 then
+      manaStr = NumToStrConverterMetric(mana)
+      manaMaxStr = NumToStrConverterMetric(manaMax)
+    end
+  else
+    manaStr = tostring(mana)
+    manaMaxStr = tostring(manaMax)
+  end
+
+  local resultStr = ""
+
+  if CUFFrame.settings.petFrameMPcurrentEnabled == true then
+    resultStr = resultStr..manaStr
+  end
+  if CUFFrame.settings.petFrameMPmaxEnabled == true then
+    if resultStr ~= "" then
+      resultStr = resultStr.." / "..manaMaxStr
+    else
+      resultStr = manaMaxStr
+    end
+  end
+  if CUFFrame.settings.petFrameMPpercentEnabled == true then
+    if manaMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+      if resultStr ~= "" then
+        resultStr = resultStr.." "..manaPercent
+      else
+        resultStr = manaPercent
+      end
+    end
+  end
+
+  if CUFFrame.settings.selectedFont == "skurri" then
+    self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "morpheus" then
+    self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  elseif CUFFrame.settings.selectedFont == "frizqt" then
+    self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+  else
+    self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+  end
+
+  self.TextString:SetText(resultStr)
+end
+
+function hookTextUpdate() 
+  hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(self)
+    if CUFFrame.settings.globalEnabled == true then
+      if CUFFrame.settings.playerFrameEnabled then
+        if self == PlayerFrameHealthBar then
+          ChangePlayerFrameHealthBarText(self)
+        end
+        if self == PlayerFrameManaBar then
+          ChangePlayerFrameManaBarText(self)
+        end
+      end
+      if CUFFrame.settings.targetFrameEnabled then
+        if self == TargetFrameHealthBar then
+          ChangeTargetFrameHealthBarText(self)
+        end
+        if self == TargetFrameManaBar then
+          ChangeTargetFrameManaBarText(self)
+        end
+      end
+      if CUFFrame.settings.focusFrameEnabled then
+        if self == FocusFrameHealthBar then
+          ChangeFocusFrameHealthBarText(self)
+        end
+        if self == FocusFrameManaBar then
+          ChangeFocusFrameManaBarText(self)
+        end
+      end
+      if CUFFrame.settings.petFrameEnabled then
+        if self == PetFrameHealthBar then
+          ChangePetFrameHealthBarText(self)
+        end
+        if self == PetFrameManaBar then
+          ChangePetFrameManaBarText(self)
+        end
+      end
+    end
+  end)
+end

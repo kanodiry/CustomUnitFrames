@@ -4,13 +4,13 @@ local L = {
 	enableAddon = "Enable AddOn",
 	
 	playerFrame = "Player Frame",
-	enablePlayerFrameText = "Enable Player Frame Text",
+	enablePlayerFrameText = "Customize Player Frame Text",
 	targetFrame = "Target Frame",
-	enableTargetFrameText = "Enable Target Frame Text",
+	enableTargetFrameText = "Customize Target Frame Text",
 	focusFrame = "Focus Frame",
-	enableFocusFrameText = "Enable Focus Frame Text",
+	enableFocusFrameText = "Customize Focus Frame Text",
 	petFrame = "Pet Frame",
-	enablePetFrameText = "Enable Pet Frame Text",
+	enablePetFrameText = "Customize Pet Frame Text",
 
 	currentHP = "Current Health",
 	maxHP = "Max Health",
@@ -31,7 +31,7 @@ local L = {
 	countBigNumbers = "Count the numbers as Big starting at:",
 	percentAccuracy = "% Accuracy (decimal places)",
 
-	showPercSmallPower = "Show % for small numbers (up to 150)",
+	showPercSmallNumbers = "Show % for small numbers (up to 150)",
 	showPercentClassicPlayers = "Show % of Health for Players in the world"
 }
 
