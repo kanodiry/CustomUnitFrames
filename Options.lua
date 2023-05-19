@@ -77,8 +77,10 @@ function CUFFrame:InitializeOptions()
             ChangePlayerFrameManaBarText(PlayerFrameManaBar)
             ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
             ChangeTargetFrameManaBarText(TargetFrameManaBar)
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            end
             ChangePetFrameHealthBarText(PetFrameHealthBar)
             ChangePetFrameManaBarText(PetFrameManaBar)
         else
@@ -86,8 +88,10 @@ function CUFFrame:InitializeOptions()
             resetUnitFramePower(PlayerFrameManaBar)
             resetUnitFrameHealth(TargetFrameHealthBar)
             resetUnitFramePower(TargetFrameManaBar)
-            resetUnitFrameHealth(FocusFrameHealthBar)
-            resetUnitFramePower(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                resetUnitFrameHealth(FocusFrameHealthBar)
+                resetUnitFramePower(FocusFrameManaBar)
+            end
             resetUnitFrameHealth(PetFrameHealthBar)
             resetUnitFramePower(PetFrameManaBar)
         end
@@ -267,11 +271,15 @@ function CUFFrame:InitializeOptions()
         self:updateFocusCheckBoxes()
 
         if focusFrameCB:GetChecked() == true then
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            end
         else
-            resetUnitFrameHealth(FocusFrameHealthBar)
-            resetUnitFramePower(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                resetUnitFrameHealth(FocusFrameHealthBar)
+                resetUnitFramePower(FocusFrameManaBar)
+            end
         end
     end)
     focusFrameCB:SetChecked(self.settings.focusFrameEnabled)
@@ -282,7 +290,9 @@ function CUFFrame:InitializeOptions()
     focusFrameHPcurrentCB:SetSize(16, 16)
     focusFrameHPcurrentCB:SetScript("OnClick", function()
         self.settings.focusFrameHPcurrentEnabled = focusFrameHPcurrentCB:GetChecked()
-        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        if select(4, GetBuildInfo()) >= 30000 then
+            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        end
     end)
     focusFrameHPcurrentCB:SetChecked(self.settings.focusFrameHPcurrentEnabled)
 
@@ -292,7 +302,9 @@ function CUFFrame:InitializeOptions()
     focusFrameHPmaxCB:SetSize(16, 16)
     focusFrameHPmaxCB:SetScript("OnClick", function()
         self.settings.focusFrameHPmaxEnabled = focusFrameHPmaxCB:GetChecked()
-        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        if select(4, GetBuildInfo()) >= 30000 then
+            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        end
     end)
     focusFrameHPmaxCB:SetChecked(self.settings.focusFrameHPmaxEnabled)
 
@@ -302,7 +314,9 @@ function CUFFrame:InitializeOptions()
     focusFrameHPpercentCB:SetSize(16, 16)
     focusFrameHPpercentCB:SetScript("OnClick", function()
         self.settings.focusFrameHPpercentEnabled = focusFrameHPpercentCB:GetChecked()
-        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        if select(4, GetBuildInfo()) >= 30000 then
+            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        end
     end)
     focusFrameHPpercentCB:SetChecked(self.settings.focusFrameHPpercentEnabled)
 
@@ -312,7 +326,9 @@ function CUFFrame:InitializeOptions()
     focusFrameMPcurrentCB:SetSize(16, 16)
     focusFrameMPcurrentCB:SetScript("OnClick", function()
         self.settings.focusFrameMPcurrentEnabled = focusFrameMPcurrentCB:GetChecked()
-        ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        if select(4, GetBuildInfo()) >= 30000 then
+            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        end
     end)
     focusFrameMPcurrentCB:SetChecked(self.settings.focusFrameMPcurrentEnabled)
 
@@ -322,7 +338,9 @@ function CUFFrame:InitializeOptions()
     focusFrameMPmaxCB:SetSize(16, 16)
     focusFrameMPmaxCB:SetScript("OnClick", function()
         self.settings.focusFrameMPmaxEnabled = focusFrameMPmaxCB:GetChecked()
-        ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        if select(4, GetBuildInfo()) >= 30000 then
+            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        end
     end)
     focusFrameMPmaxCB:SetChecked(self.settings.focusFrameMPmaxEnabled)
 
@@ -332,7 +350,9 @@ function CUFFrame:InitializeOptions()
     focusFrameMPpercentCB:SetSize(16, 16)
     focusFrameMPpercentCB:SetScript("OnClick", function()
         self.settings.focusFrameMPpercentEnabled = focusFrameMPpercentCB:GetChecked()
-        ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        if select(4, GetBuildInfo()) >= 30000 then
+            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        end
     end)
     focusFrameMPpercentCB:SetChecked(self.settings.focusFrameMPpercentEnabled)
 
@@ -538,8 +558,10 @@ function CUFFrame:InitializeOptions()
             ChangePlayerFrameManaBarText(PlayerFrameManaBar)
             ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
             ChangeTargetFrameManaBarText(TargetFrameManaBar)
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            end
             ChangePetFrameHealthBarText(PetFrameHealthBar)
             ChangePetFrameManaBarText(PetFrameManaBar)
         end
@@ -567,8 +589,10 @@ function CUFFrame:InitializeOptions()
             ChangePlayerFrameManaBarText(PlayerFrameManaBar)
             ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
             ChangeTargetFrameManaBarText(TargetFrameManaBar)
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            end
             ChangePetFrameHealthBarText(PetFrameHealthBar)
             ChangePetFrameManaBarText(PetFrameManaBar)
         end
@@ -624,8 +648,10 @@ function CUFFrame:InitializeOptions()
             ChangePlayerFrameManaBarText(PlayerFrameManaBar)
             ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
             ChangeTargetFrameManaBarText(TargetFrameManaBar)
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            end
             ChangePetFrameHealthBarText(PetFrameHealthBar)
             ChangePetFrameManaBarText(PetFrameManaBar)
         end
@@ -696,8 +722,10 @@ function CUFFrame:InitializeOptions()
             ChangePlayerFrameManaBarText(PlayerFrameManaBar)
             ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
             ChangeTargetFrameManaBarText(TargetFrameManaBar)
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            end
             ChangePetFrameHealthBarText(PetFrameHealthBar)
             ChangePetFrameManaBarText(PetFrameManaBar)
         end
@@ -710,11 +738,11 @@ function CUFFrame:InitializeOptions()
     percentAccuracySlider:SetPoint("TOPLEFT", bigNumbersDropDown, 20, -80)
     percentAccuracySlider:SetMinMaxValues(0, 4)
     percentAccuracySlider:SetValueStep(1)
-    percentAccuracySlider:SetValue(self.settings.percentAccuracy)
+    percentAccuracySlider:SetValue(CUFFrame.settings.percentAccuracy)
     percentAccuracySlider:SetOrientation("HORIZONTAL")
     percentAccuracySlider:SetObeyStepOnDrag(true)
     PercentAccuracySliderLow:SetText("0 to 4")
-    PercentAccuracySliderHigh:SetText(tostring(self.settings.percentAccuracy))
+    PercentAccuracySliderHigh:SetText(tostring(CUFFrame.settings.percentAccuracy))
 
     percentAccuracySlider:SetScript("OnValueChanged", function(self, value)
         PercentAccuracySliderHigh:SetText(tostring(value))
@@ -725,8 +753,10 @@ function CUFFrame:InitializeOptions()
             ChangePlayerFrameManaBarText(PlayerFrameManaBar)
             ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
             ChangeTargetFrameManaBarText(TargetFrameManaBar)
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            end
             ChangePetFrameHealthBarText(PetFrameHealthBar)
             ChangePetFrameManaBarText(PetFrameManaBar)
         end
@@ -748,8 +778,10 @@ function CUFFrame:InitializeOptions()
             ChangePlayerFrameManaBarText(PlayerFrameManaBar)
             ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
             ChangeTargetFrameManaBarText(TargetFrameManaBar)
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+            end
             ChangePetFrameHealthBarText(PetFrameHealthBar)
             ChangePetFrameManaBarText(PetFrameManaBar)
         end
@@ -768,8 +800,10 @@ function CUFFrame:InitializeOptions()
                 ChangePlayerFrameManaBarText(PlayerFrameManaBar)
                 ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
                 ChangeTargetFrameManaBarText(TargetFrameManaBar)
-                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                if select(4, GetBuildInfo()) >= 30000 then
+                    ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+                    ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                end
                 ChangePetFrameHealthBarText(PetFrameHealthBar)
                 ChangePetFrameManaBarText(PetFrameManaBar)
             end
