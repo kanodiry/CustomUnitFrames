@@ -40,7 +40,7 @@ CUFFrame.defaults = {
     petFrameMPmaxEnabled = true,
     petFrameMPpercentEnabled = true,
 
-    selectedFont = "frizqt",
+    selectedFont = "arial",
     fontSize = 13,
 
     selectedFormat = 1,
