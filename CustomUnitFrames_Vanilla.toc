@@ -3,5 +3,9 @@
 ## Author: kanodiry
 ## Version: 1.0.4
 ## Notes: Change UnitFrames texts to format: <Current> / <Total> <Percent%> and shorts big numbers with abbreviated units.
+## SavedVariables: CustomUnitFramesSettings
 
+Localization.lua
+Localization.ru.lua
 CustomUnitFrames.lua
+Options.lua
