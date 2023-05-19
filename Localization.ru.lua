@@ -18,9 +18,9 @@ L.currentHP = "Текущее здоровье"
 L.maxHP = "Максимальное здоровье"
 L.percentHP = "% здоровья"
 
-L.currentMP = "Текущее здоровье"
-L.maxMP = "Максимальное здоровье"
-L.percentMP = "% здоровья"
+L.currentMP = "Текущий ресурс"
+L.maxMP = "Максимально ресурса"
+L.percentMP = "% ресурса"
 
 L.visualSettings = "Параметры Отображения"
 L.fontSettings = "Параметры Шрифта"
