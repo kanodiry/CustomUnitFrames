@@ -270,17 +270,10 @@ function CUFFrame:InitializeOptions()
         self.settings.focusFrameEnabled = focusFrameCB:GetChecked()
         self:updateFocusCheckBoxes()
 
-        if focusFrameCB:GetChecked() == true then
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFocusFrameManaBarText(FocusFrameManaBar)
-            end
-        else
-            if select(4, GetBuildInfo()) >= 30000 then
-                resetUnitFrameHealth(FocusFrameHealthBar)
-                resetUnitFramePower(FocusFrameManaBar)
-            end
-        end
+        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        resetUnitFrameHealth(FocusFrameHealthBar)
+        resetUnitFramePower(FocusFrameManaBar)
     end)
     focusFrameCB:SetChecked(self.settings.focusFrameEnabled)
 
@@ -290,9 +283,7 @@ function CUFFrame:InitializeOptions()
     focusFrameHPcurrentCB:SetSize(16, 16)
     focusFrameHPcurrentCB:SetScript("OnClick", function()
         self.settings.focusFrameHPcurrentEnabled = focusFrameHPcurrentCB:GetChecked()
-        if select(4, GetBuildInfo()) >= 30000 then
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-        end
+        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
     end)
     focusFrameHPcurrentCB:SetChecked(self.settings.focusFrameHPcurrentEnabled)
 
@@ -302,9 +293,7 @@ function CUFFrame:InitializeOptions()
     focusFrameHPmaxCB:SetSize(16, 16)
     focusFrameHPmaxCB:SetScript("OnClick", function()
         self.settings.focusFrameHPmaxEnabled = focusFrameHPmaxCB:GetChecked()
-        if select(4, GetBuildInfo()) >= 30000 then
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-        end
+        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
     end)
     focusFrameHPmaxCB:SetChecked(self.settings.focusFrameHPmaxEnabled)
 
@@ -314,9 +303,7 @@ function CUFFrame:InitializeOptions()
     focusFrameHPpercentCB:SetSize(16, 16)
     focusFrameHPpercentCB:SetScript("OnClick", function()
         self.settings.focusFrameHPpercentEnabled = focusFrameHPpercentCB:GetChecked()
-        if select(4, GetBuildInfo()) >= 30000 then
-            ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-        end
+        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
     end)
     focusFrameHPpercentCB:SetChecked(self.settings.focusFrameHPpercentEnabled)
 
@@ -326,9 +313,7 @@ function CUFFrame:InitializeOptions()
     focusFrameMPcurrentCB:SetSize(16, 16)
     focusFrameMPcurrentCB:SetScript("OnClick", function()
         self.settings.focusFrameMPcurrentEnabled = focusFrameMPcurrentCB:GetChecked()
-        if select(4, GetBuildInfo()) >= 30000 then
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
-        end
+        ChangeFocusFrameManaBarText(FocusFrameManaBar)
     end)
     focusFrameMPcurrentCB:SetChecked(self.settings.focusFrameMPcurrentEnabled)
 
@@ -338,9 +323,7 @@ function CUFFrame:InitializeOptions()
     focusFrameMPmaxCB:SetSize(16, 16)
     focusFrameMPmaxCB:SetScript("OnClick", function()
         self.settings.focusFrameMPmaxEnabled = focusFrameMPmaxCB:GetChecked()
-        if select(4, GetBuildInfo()) >= 30000 then
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
-        end
+        ChangeFocusFrameManaBarText(FocusFrameManaBar)
     end)
     focusFrameMPmaxCB:SetChecked(self.settings.focusFrameMPmaxEnabled)
 
@@ -350,9 +333,7 @@ function CUFFrame:InitializeOptions()
     focusFrameMPpercentCB:SetSize(16, 16)
     focusFrameMPpercentCB:SetScript("OnClick", function()
         self.settings.focusFrameMPpercentEnabled = focusFrameMPpercentCB:GetChecked()
-        if select(4, GetBuildInfo()) >= 30000 then
-            ChangeFocusFrameManaBarText(FocusFrameManaBar)
-        end
+        ChangeFocusFrameManaBarText(FocusFrameManaBar)
     end)
     focusFrameMPpercentCB:SetChecked(self.settings.focusFrameMPpercentEnabled)
 

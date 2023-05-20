@@ -1,38 +1,38 @@
 local AddonName, Addon = ...
 
 local L = {
-	enableAddon = "Enable AddOn",
-	
-	playerFrame = "Player Frame",
-	enablePlayerFrameText = "Customize Player Frame Text",
-	targetFrame = "Target Frame",
-	enableTargetFrameText = "Customize Target Frame Text",
-	focusFrame = "Focus Frame",
-	enableFocusFrameText = "Customize Focus Frame Text",
-	petFrame = "Pet Frame",
-	enablePetFrameText = "Customize Pet Frame Text",
+    enableAddon = "Enable AddOn",
 
-	currentHP = "Current Health",
-	maxHP = "Max Health",
-	percentHP = "% Health",
+    playerFrame = "Player Frame",
+    enablePlayerFrameText = "Customize Player Frame Text",
+    targetFrame = "Target Frame",
+    enableTargetFrameText = "Customize Target Frame Text",
+    focusFrame = "Focus Frame",
+    enableFocusFrameText = "Customize Focus Frame Text",
+    petFrame = "Pet Frame",
+    enablePetFrameText = "Customize Pet Frame Text",
 
-	currentMP = "Current Power",
-	maxMP = "Max Power",
-	percentMP = "% Power",
+    currentHP = "Current Health",
+    maxHP = "Max Health",
+    percentHP = "% Health",
 
-	visualSettings = "Visual Settings",
-	fontSettings = "Font Settings",
-	fontType = "Font",
-	fontSize = "Font Size",
+    currentMP = "Current Power",
+    maxMP = "Max Power",
+    percentMP = "% Power",
 
-	formatBigNumbers = "Formatting Big Numbers",
-	formatStyle = "Formatting Style",
+    visualSettings = "Visual Settings",
+    fontSettings = "Font Settings",
+    fontType = "Font",
+    fontSize = "Font Size",
 
-	countBigNumbers = "Count the numbers as Big starting at:",
-	percentAccuracy = "% Accuracy (decimal places)",
+    formatBigNumbers = "Formatting Big Numbers",
+    formatStyle = "Formatting Style",
 
-	showPercSmallNumbers = "Show % for small numbers (up to 150)",
-	showPercentClassicPlayers = "Show % of Health for Players in the world"
+    countBigNumbers = "Count the numbers as Big starting at:",
+    percentAccuracy = "% Accuracy (decimal places)",
+
+    showPercSmallNumbers = "Show % for small numbers (up to 150)",
+    showPercentClassicPlayers = "Show % of Health for Players in the world"
 }
 
 Addon.L = setmetatable(L, { __index = function(t, k) return k end })
