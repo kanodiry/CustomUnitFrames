@@ -558,11 +558,11 @@ function CUFFrame:InitializeOptions()
     fontSizeSlider:SetValue(self.settings.fontSize)
     fontSizeSlider:SetOrientation("HORIZONTAL")
     fontSizeSlider:SetObeyStepOnDrag(true)
-    FontSizeSliderLow:SetText("1 to 20")
-    FontSizeSliderHigh:SetText(string.format("%.2f", self.settings.fontSize))
+    FontSizeSliderLow:SetText("1")
+    FontSizeSliderHigh:SetText("20")
 
     fontSizeSlider:SetScript("OnValueChanged", function(self, value)
-        FontSizeSliderHigh:SetText(string.format("%.2f", value))
+        fontSizeEditBox:SetText(string.format("%.2f", value))
         CUFFrame.settings.fontSize = value
 
         if CUFFrame.settings.globalEnabled == true then
@@ -577,6 +577,19 @@ function CUFFrame:InitializeOptions()
             ChangePetFrameHealthBarText(PetFrameHealthBar)
             ChangePetFrameManaBarText(PetFrameManaBar)
         end
+    end)
+
+    fontSizeEditBox = CreateFrame("EditBox", "FontSizeEditBox", self.panel_visual, "InputBoxTemplate")
+    fontSizeEditBox:SetSize(50, 20)
+    fontSizeEditBox:SetPoint("TOPLEFT", fontSizeSlider, 70, -25)
+    fontSizeEditBox:SetFontObject("GameFontHighlight")
+    fontSizeEditBox:SetAutoFocus(false)
+    fontSizeEditBox:SetText(string.format("%.2f", fontSizeSlider:GetValue()))
+    fontSizeEditBox:SetCursorPosition(0)
+    fontSizeEditBox:SetScript("OnEnterPressed", function(self)
+        local newValue = tonumber(self:GetText())
+        fontSizeSlider:SetValue(newValue)
+        self:ClearFocus()
     end)
 
     fontSizeTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
