@@ -32,7 +32,9 @@ local L = {
     percentAccuracy = "% Accuracy (decimal places)",
 
     showPercSmallNumbers = "Show % for small numbers (up to 150)",
-    showPercentClassicPlayers = "Show % of Health for Players in the world"
+    showPercentClassicPlayers = "Show % of Health for Players in the world",
+
+    thousandLetter = "K"
 }
 
 Addon.L = setmetatable(L, { __index = function(t, k) return k end })

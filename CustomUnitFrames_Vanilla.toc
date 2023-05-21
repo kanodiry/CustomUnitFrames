@@ -1,7 +1,7 @@
 ## Interface: 11403
 ## Title: CustomUnitFrames
 ## Author: kanodiry
-## Version: 2.0.3
+## Version: 2.0.4
 ## Notes: Change UnitFrames texts to format: <Current> / <Total> <Percent%> and shorts big numbers with abbreviated units.
 ## SavedVariablesPerCharacter: CustomUnitFramesSettings
 

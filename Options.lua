@@ -591,7 +591,7 @@ function CUFFrame:InitializeOptions()
     formattingDropDownMenu:SetPoint("TOPLEFT", formattingTitle, 0, -45)
     UIDropDownMenu_SetWidth(formattingDropDownMenu, 180)
     if self.settings.selectedFormat == 1 then
-        UIDropDownMenu_SetText(formattingDropDownMenu, "Blizzard: 1234567 -> 1234T")
+        UIDropDownMenu_SetText(formattingDropDownMenu, "Blizzard: 1234567 -> 1234"..L.thousandLetter)
     else
         UIDropDownMenu_SetText(formattingDropDownMenu, "Metric: 123456 -> 123.4K")
     end
@@ -603,7 +603,7 @@ function CUFFrame:InitializeOptions()
     UIDropDownMenu_Initialize(formattingDropDownMenu, function(self, level, menuList)
         local formatStyle = UIDropDownMenu_CreateInfo()
 
-        formatStyle.text = "Blizzard: 1234567 -> 1234T"
+        formatStyle.text = "Blizzard: 1234567 -> 1234"..L.thousandLetter
         formatStyle.value = 1
         formatStyle.checked = formatStyle.value == CUFFrame.settings.selectedFormat
         formatStyle.func = self.SetValue

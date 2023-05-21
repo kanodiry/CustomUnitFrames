@@ -1,3 +1,6 @@
+local _, Addon = ...
+local L = Addon.L
+
 CUFFrame = CreateFrame("Frame")
 
 function CUFFrame:Init(event, addOnName)
@@ -45,7 +48,7 @@ local function NumToStrConverterBlizzard(value)
     if value < 1000 then
         return tostring(value)
     else
-        return string.format("%.0fT", value / 1000)
+        return string.format("%.0f"..L.thousandLetter, value / 1000)
     end
 end
 
