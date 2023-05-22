@@ -1,13 +1,6 @@
 _, Addon = ...
 L = Addon.L
 
-local bigNumbersThreshold = {
-    [1] = 1000,
-    [2] = 10000,
-    [3] = 100000,
-    [4] = 1000000
-}
-
 CUFFrame = CreateFrame("Frame")
 
 function CUFFrame:Init(event, addOnName)
@@ -57,8 +50,7 @@ if select(4, GetBuildInfo()) <= 30000 then
 end
 
 local function NumToStrConverterBlizzard(value)
-    local threshold = bigNumbersThreshold[CUFFrame.settings.bigNumbers]
-    if value < threshold then
+    if value < CUFFrame.settings.bigNumbers then
         return tostring(value)
     end
 
@@ -70,8 +62,7 @@ local function NumToStrConverterBlizzard(value)
 end
 
 local function NumToStrConverterMetric(value)
-    local threshold = bigNumbersThreshold[CUFFrame.settings.bigNumbers]
-    if value < threshold then
+    if value < CUFFrame.settings.bigNumbers then
         return tostring(value)
     end
     

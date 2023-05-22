@@ -702,7 +702,7 @@ function CUFFrame:InitializeOptions()
         local bigNumbers = UIDropDownMenu_CreateInfo()
 
         bigNumbers.text = "1.000"
-        bigNumbers.value = 1
+        bigNumbers.value = 1000
         bigNumbers.checked = bigNumbers.value == CUFFrame.settings.bigNumbers
         bigNumbers.func = self.SetValue
         bigNumbers.arg1 = bigNumbers.value
@@ -710,7 +710,7 @@ function CUFFrame:InitializeOptions()
         UIDropDownMenu_AddButton(bigNumbers)
 
         bigNumbers.text = "10.000"
-        bigNumbers.value = 2
+        bigNumbers.value = 10000
         bigNumbers.checked = bigNumbers.value == CUFFrame.settings.bigNumbers
         bigNumbers.func = self.SetValue
         bigNumbers.arg1 = bigNumbers.value
@@ -718,7 +718,7 @@ function CUFFrame:InitializeOptions()
         UIDropDownMenu_AddButton(bigNumbers)
 
         bigNumbers.text = "100.000"
-        bigNumbers.value = 3
+        bigNumbers.value = 100000
         bigNumbers.checked = bigNumbers.value == CUFFrame.settings.bigNumbers
         bigNumbers.func = self.SetValue
         bigNumbers.arg1 = bigNumbers.value
@@ -726,7 +726,7 @@ function CUFFrame:InitializeOptions()
         UIDropDownMenu_AddButton(bigNumbers)
 
         bigNumbers.text = "1.000.000"
-        bigNumbers.value = 4
+        bigNumbers.value = 1000000
         bigNumbers.checked = bigNumbers.value == CUFFrame.settings.bigNumbers
         bigNumbers.func = self.SetValue
         bigNumbers.arg1 = bigNumbers.value
