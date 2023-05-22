@@ -36,4 +36,4 @@ L.percentAccuracy = "Точность % (после запятой)"
 L.showPercSmallNumbers = "Показывать % для малых чисел (до 150)"
 L.showPercentClassicPlayers = "Показывать % Здоровья Игроков в мире"
 
-L.thousandLetter = "Т"
+L.thousandLetter = "T"
