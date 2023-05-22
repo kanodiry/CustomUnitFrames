@@ -1,6 +1,3 @@
-local _, Addon = ...
-local L = Addon.L
-
 CUFFrame.defaults = {
     defaultFrameFont = "Fonts/ARIALN.TTF",
     defaultFrameFontSize = 13.999999046326,
@@ -8,40 +5,51 @@ CUFFrame.defaults = {
     
     globalEnabled = true,
 
-    playerFrameEnabled = true,
-    playerFrameHPcurrentEnabled = true,
-    playerFrameHPmaxEnabled = true,
-    playerFrameHPpercentEnabled = true,
-    playerFrameMPcurrentEnabled = true,
-    playerFrameMPmaxEnabled = true,
-    playerFrameMPpercentEnabled = true,
-
-    targetFrameEnabled = true,
-    targetFrameHPcurrentEnabled = true,
-    targetFrameHPmaxEnabled = true,
-    targetFrameHPpercentEnabled = true,
-    targetFrameMPcurrentEnabled = true,
-    targetFrameMPmaxEnabled = true,
-    targetFrameMPpercentEnabled = true,
-
-    focusFrameEnabled = true,
-    focusFrameHPcurrentEnabled = true,
-    focusFrameHPmaxEnabled = true,
-    focusFrameHPpercentEnabled = true,
-    focusFrameMPcurrentEnabled = true,
-    focusFrameMPmaxEnabled = true,
-    focusFrameMPpercentEnabled = true,
-
-    petFrameEnabled = true,
-    petFrameHPcurrentEnabled = true,
-    petFrameHPmaxEnabled = true,
-    petFrameHPpercentEnabled = true,
-    petFrameMPcurrentEnabled = true,
-    petFrameMPmaxEnabled = true,
-    petFrameMPpercentEnabled = true,
+    frameEnabled = {
+        ["player"] = true,
+        ["target"] = true,
+        ["focus"] = true,
+        ["pet"] = true
+    },
+    frameHPTextEnabled = {
+        ["player"] = true,
+        ["target"] = true,
+        ["focus"] = true,
+        ["pet"] = true
+    },
+    frameHPMaxTextEnabled = {
+        ["player"] = true,
+        ["target"] = true,
+        ["focus"] = true,
+        ["pet"] = true
+    },
+    frameHPPercentTextEnabled = {
+        ["player"] = true,
+        ["target"] = true,
+        ["focus"] = true,
+        ["pet"] = true
+    },
+    frameMPTextEnabled = {
+        ["player"] = true,
+        ["target"] = true,
+        ["focus"] = true,
+        ["pet"] = true
+    },
+    frameMPMaxTextEnabled = {
+        ["player"] = true,
+        ["target"] = true,
+        ["focus"] = true,
+        ["pet"] = true
+    },
+    frameMPPercentTextEnabled = {
+        ["player"] = true,
+        ["target"] = true,
+        ["focus"] = true,
+        ["pet"] = true
+    },
 
     selectedFont = "arial",
-    fontSize = 13,
+    fontSize = 13.5,
 
     selectedFormat = 1,
     bigNumbers = 3,
@@ -73,16 +81,16 @@ function CUFFrame:InitializeOptions()
         self:updatePetCheckBoxes()
 
         if enabledCB:GetChecked() == true then
-            ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
-            ChangePlayerFrameManaBarText(PlayerFrameManaBar)
-            ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
-            ChangeTargetFrameManaBarText(TargetFrameManaBar)
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
             if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
             end
-            ChangePetFrameHealthBarText(PetFrameHealthBar)
-            ChangePetFrameManaBarText(PetFrameManaBar)
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
         else
             resetUnitFrameHealth(PlayerFrameHealthBar)
             resetUnitFramePower(PlayerFrameManaBar)
@@ -105,78 +113,78 @@ function CUFFrame:InitializeOptions()
     playerFrameCB:SetPoint("TOPLEFT", playerFrameText, 0, -20)
     playerFrameCB.Text:SetText(L.enablePlayerFrameText)
     playerFrameCB:SetScript("OnClick", function()
-        self.settings.playerFrameEnabled = playerFrameCB:GetChecked()
+        self.settings.frameEnabled["player"] = playerFrameCB:GetChecked()
         self:updatePlayerCheckBoxes()
 
         if playerFrameCB:GetChecked() == true then
-            ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
-            ChangePlayerFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
         else
             resetUnitFrameHealth(PlayerFrameHealthBar)
             resetUnitFramePower(PlayerFrameManaBar)
         end
     end)
-    playerFrameCB:SetChecked(self.settings.playerFrameEnabled)
+    playerFrameCB:SetChecked(self.settings.frameEnabled["player"])
 
     playerFrameHPcurrentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     playerFrameHPcurrentCB:SetPoint("TOPLEFT", playerFrameCB, 30, -35)
     playerFrameHPcurrentCB.Text:SetText(L.currentHP)
     playerFrameHPcurrentCB:SetSize(16, 16)
     playerFrameHPcurrentCB:SetScript("OnClick", function()
-        self.settings.playerFrameHPcurrentEnabled = playerFrameHPcurrentCB:GetChecked()
-        ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
+        self.settings.frameHPTextEnabled["player"] = playerFrameHPcurrentCB:GetChecked()
+        ChangeFrameHealthBarText(PlayerFrameHealthBar)
     end)
-    playerFrameHPcurrentCB:SetChecked(self.settings.playerFrameHPcurrentEnabled)
+    playerFrameHPcurrentCB:SetChecked(self.settings.frameHPTextEnabled["player"])
 
     playerFrameHPmaxCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     playerFrameHPmaxCB:SetPoint("TOPLEFT", playerFrameHPcurrentCB, 0, -20)
     playerFrameHPmaxCB.Text:SetText(L.maxHP)
     playerFrameHPmaxCB:SetSize(16, 16)
     playerFrameHPmaxCB:SetScript("OnClick", function()
-        self.settings.playerFrameHPmaxEnabled = playerFrameHPmaxCB:GetChecked()
-        ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
+        self.settings.frameHPMaxTextEnabled["player"] = playerFrameHPmaxCB:GetChecked()
+        ChangeFrameHealthBarText(PlayerFrameHealthBar)
     end)
-    playerFrameHPmaxCB:SetChecked(self.settings.playerFrameHPmaxEnabled)
+    playerFrameHPmaxCB:SetChecked(self.settings.frameHPMaxTextEnabled["player"])
 
     playerFrameHPpercentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     playerFrameHPpercentCB:SetPoint("TOPLEFT", playerFrameHPmaxCB, 0, -20)
     playerFrameHPpercentCB.Text:SetText(L.percentHP)
     playerFrameHPpercentCB:SetSize(16, 16)
     playerFrameHPpercentCB:SetScript("OnClick", function()
-        self.settings.playerFrameHPpercentEnabled = playerFrameHPpercentCB:GetChecked()
-        ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
+        self.settings.frameHPPercentTextEnabled["player"] = playerFrameHPpercentCB:GetChecked()
+        ChangeFrameHealthBarText(PlayerFrameHealthBar)
     end)
-    playerFrameHPpercentCB:SetChecked(self.settings.playerFrameHPpercentEnabled)
+    playerFrameHPpercentCB:SetChecked(self.settings.frameHPPercentTextEnabled["player"])
 
     playerFrameMPcurrentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     playerFrameMPcurrentCB:SetPoint("TOPLEFT", playerFrameHPcurrentCB, 250, 0)
     playerFrameMPcurrentCB.Text:SetText(L.currentMP)
     playerFrameMPcurrentCB:SetSize(16, 16)
     playerFrameMPcurrentCB:SetScript("OnClick", function()
-        self.settings.playerFrameMPcurrentEnabled = playerFrameMPcurrentCB:GetChecked()
-        ChangePlayerFrameManaBarText(PlayerFrameManaBar)
+        self.settings.frameMPTextEnabled["player"] = playerFrameMPcurrentCB:GetChecked()
+        ChangeFrameManaBarText(PlayerFrameManaBar)
     end)
-    playerFrameMPcurrentCB:SetChecked(self.settings.playerFrameMPcurrentEnabled)
+    playerFrameMPcurrentCB:SetChecked(self.settings.frameMPTextEnabled["player"])
 
     playerFrameMPmaxCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     playerFrameMPmaxCB:SetPoint("TOPLEFT", playerFrameMPcurrentCB, 0, -20)
     playerFrameMPmaxCB.Text:SetText(L.maxMP)
     playerFrameMPmaxCB:SetSize(16, 16)
     playerFrameMPmaxCB:SetScript("OnClick", function()
-        self.settings.playerFrameMPmaxEnabled = playerFrameMPmaxCB:GetChecked()
-        ChangePlayerFrameManaBarText(PlayerFrameManaBar)
+        self.settings.frameMPMaxTextEnabled["player"] = playerFrameMPmaxCB:GetChecked()
+        ChangeFrameManaBarText(PlayerFrameManaBar)
     end)
-    playerFrameMPmaxCB:SetChecked(self.settings.playerFrameMPmaxEnabled)
+    playerFrameMPmaxCB:SetChecked(self.settings.frameMPMaxTextEnabled["player"])
 
     playerFrameMPpercentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     playerFrameMPpercentCB:SetPoint("TOPLEFT", playerFrameMPmaxCB, 0, -20)
     playerFrameMPpercentCB.Text:SetText(L.percentMP)
     playerFrameMPpercentCB:SetSize(16, 16)
     playerFrameMPpercentCB:SetScript("OnClick", function()
-        self.settings.playerFrameMPpercentEnabled = playerFrameMPpercentCB:GetChecked()
-        ChangePlayerFrameManaBarText(PlayerFrameManaBar)
+        self.settings.frameMPPercentTextEnabled["player"] = playerFrameMPpercentCB:GetChecked()
+        ChangeFrameManaBarText(PlayerFrameManaBar)
     end)
-    playerFrameMPpercentCB:SetChecked(self.settings.playerFrameMPpercentEnabled)
+    playerFrameMPpercentCB:SetChecked(self.settings.frameMPPercentTextEnabled["player"])
 
     targetFrameText = self.panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     targetFrameText:SetPoint("TOPLEFT", playerFrameText, 0, -120)
@@ -186,78 +194,78 @@ function CUFFrame:InitializeOptions()
     targetFrameCB:SetPoint("TOPLEFT", targetFrameText, 0, -20)
     targetFrameCB.Text:SetText(L.enableTargetFrameText)
     targetFrameCB:SetScript("OnClick", function()
-        self.settings.targetFrameEnabled = targetFrameCB:GetChecked()
+        self.settings.frameEnabled["target"] = targetFrameCB:GetChecked()
         self:updateTargetCheckBoxes()
 
         if targetFrameCB:GetChecked() == true then
-            ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
-            ChangeTargetFrameManaBarText(TargetFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
         else
             resetUnitFrameHealth(TargetFrameHealthBar)
             resetUnitFramePower(TargetFrameManaBar)
         end
     end)
-    targetFrameCB:SetChecked(self.settings.targetFrameEnabled)
+    targetFrameCB:SetChecked(self.settings.frameEnabled["target"])
 
     targetFrameHPcurrentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     targetFrameHPcurrentCB:SetPoint("TOPLEFT", targetFrameCB, 30, -35)
     targetFrameHPcurrentCB.Text:SetText(L.currentHP)
     targetFrameHPcurrentCB:SetSize(16, 16)
     targetFrameHPcurrentCB:SetScript("OnClick", function()
-        self.settings.targetFrameHPcurrentEnabled = targetFrameHPcurrentCB:GetChecked()
-        ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
+        self.settings.frameHPTextEnabled["target"] = targetFrameHPcurrentCB:GetChecked()
+        ChangeFrameHealthBarText(TargetFrameHealthBar)
     end)
-    targetFrameHPcurrentCB:SetChecked(self.settings.targetFrameHPcurrentEnabled)
+    targetFrameHPcurrentCB:SetChecked(self.settings.frameHPTextEnabled["target"])
 
     targetFrameHPmaxCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     targetFrameHPmaxCB:SetPoint("TOPLEFT", targetFrameHPcurrentCB, 0, -20)
     targetFrameHPmaxCB.Text:SetText(L.maxHP)
     targetFrameHPmaxCB:SetSize(16, 16)
     targetFrameHPmaxCB:SetScript("OnClick", function()
-        self.settings.targetFrameHPmaxEnabled = targetFrameHPmaxCB:GetChecked()
-        ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
+        self.settings.frameHPMaxTextEnabled["target"] = targetFrameHPmaxCB:GetChecked()
+        ChangeFrameHealthBarText(TargetFrameHealthBar)
     end)
-    targetFrameHPmaxCB:SetChecked(self.settings.targetFrameHPmaxEnabled)
+    targetFrameHPmaxCB:SetChecked(self.settings.frameHPMaxTextEnabled["target"])
 
     targetFrameHPpercentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     targetFrameHPpercentCB:SetPoint("TOPLEFT", targetFrameHPmaxCB, 0, -20)
     targetFrameHPpercentCB.Text:SetText(L.percentHP)
     targetFrameHPpercentCB:SetSize(16, 16)
     targetFrameHPpercentCB:SetScript("OnClick", function()
-        self.settings.targetFrameHPpercentEnabled = targetFrameHPpercentCB:GetChecked()
-        ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
+        self.settings.frameHPPercentTextEnabled["target"] = targetFrameHPpercentCB:GetChecked()
+        ChangeFrameHealthBarText(TargetFrameHealthBar)
     end)
-    targetFrameHPpercentCB:SetChecked(self.settings.targetFrameHPpercentEnabled)
+    targetFrameHPpercentCB:SetChecked(self.settings.frameHPPercentTextEnabled["target"])
 
     targetFrameMPcurrentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     targetFrameMPcurrentCB:SetPoint("TOPLEFT", targetFrameHPcurrentCB, 250, 0)
     targetFrameMPcurrentCB.Text:SetText(L.currentMP)
     targetFrameMPcurrentCB:SetSize(16, 16)
     targetFrameMPcurrentCB:SetScript("OnClick", function()
-        self.settings.targetFrameMPcurrentEnabled = targetFrameMPcurrentCB:GetChecked()
-        ChangeTargetFrameManaBarText(TargetFrameManaBar)
+        self.settings.frameMPTextEnabled["target"] = targetFrameMPcurrentCB:GetChecked()
+        ChangeFrameManaBarText(TargetFrameManaBar)
     end)
-    targetFrameMPcurrentCB:SetChecked(self.settings.targetFrameMPcurrentEnabled)
+    targetFrameMPcurrentCB:SetChecked(self.settings.frameMPTextEnabled["target"])
 
     targetFrameMPmaxCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     targetFrameMPmaxCB:SetPoint("TOPLEFT", targetFrameMPcurrentCB, 0, -20)
     targetFrameMPmaxCB.Text:SetText(L.maxMP)
     targetFrameMPmaxCB:SetSize(16, 16)
     targetFrameMPmaxCB:SetScript("OnClick", function()
-        self.settings.targetFrameMPmaxEnabled = targetFrameMPmaxCB:GetChecked()
-        ChangeTargetFrameManaBarText(TargetFrameManaBar)
+        self.settings.frameMPMaxTextEnabled["target"] = targetFrameMPmaxCB:GetChecked()
+        ChangeFrameManaBarText(TargetFrameManaBar)
     end)
-    targetFrameMPmaxCB:SetChecked(self.settings.targetFrameMPmaxEnabled)
+    targetFrameMPmaxCB:SetChecked(self.settings.frameMPMaxTextEnabled["target"])
 
     targetFrameMPpercentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     targetFrameMPpercentCB:SetPoint("TOPLEFT", targetFrameMPmaxCB, 0, -20)
     targetFrameMPpercentCB.Text:SetText(L.percentMP)
     targetFrameMPpercentCB:SetSize(16, 16)
     targetFrameMPpercentCB:SetScript("OnClick", function()
-        self.settings.targetFrameMPpercentEnabled = targetFrameMPpercentCB:GetChecked()
-        ChangeTargetFrameManaBarText(TargetFrameManaBar)
+        self.settings.frameMPPercentTextEnabled["target"] = targetFrameMPpercentCB:GetChecked()
+        ChangeFrameManaBarText(TargetFrameManaBar)
     end)
-    targetFrameMPpercentCB:SetChecked(self.settings.targetFrameMPpercentEnabled)
+    targetFrameMPpercentCB:SetChecked(self.settings.frameMPPercentTextEnabled["target"])
 
     focusFrameText = self.panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     focusFrameText:SetPoint("TOPLEFT", targetFrameText, 0, -120)
@@ -267,156 +275,175 @@ function CUFFrame:InitializeOptions()
     focusFrameCB:SetPoint("TOPLEFT", focusFrameText, 0, -20)
     focusFrameCB.Text:SetText(L.enableFocusFrameText)
     focusFrameCB:SetScript("OnClick", function()
-        self.settings.focusFrameEnabled = focusFrameCB:GetChecked()
+        self.settings.frameEnabled["focus"] = focusFrameCB:GetChecked()
         self:updateFocusCheckBoxes()
 
-        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-        ChangeFocusFrameManaBarText(FocusFrameManaBar)
-        resetUnitFrameHealth(FocusFrameHealthBar)
-        resetUnitFramePower(FocusFrameManaBar)
+        if focusFrameCB:GetChecked() == true then
+            ChangeFrameHealthBarText(FocusFrameHealthBar)
+            ChangeFrameManaBarText(FocusFrameManaBar)
+        else
+            resetUnitFrameHealth(FocusFrameHealthBar)
+            resetUnitFramePower(FocusFrameManaBar)
+        end
     end)
-    focusFrameCB:SetChecked(self.settings.focusFrameEnabled)
+    focusFrameCB:SetChecked(self.settings.frameEnabled["focus"])
 
     focusFrameHPcurrentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     focusFrameHPcurrentCB:SetPoint("TOPLEFT", focusFrameCB, 30, -35)
     focusFrameHPcurrentCB.Text:SetText(L.currentHP)
     focusFrameHPcurrentCB:SetSize(16, 16)
     focusFrameHPcurrentCB:SetScript("OnClick", function()
-        self.settings.focusFrameHPcurrentEnabled = focusFrameHPcurrentCB:GetChecked()
-        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        self.settings.frameHPTextEnabled["focus"] = focusFrameHPcurrentCB:GetChecked()
+        ChangeFrameHealthBarText(FocusFrameHealthBar)
     end)
-    focusFrameHPcurrentCB:SetChecked(self.settings.focusFrameHPcurrentEnabled)
+    focusFrameHPcurrentCB:SetChecked(self.settings.frameHPTextEnabled["focus"])
 
     focusFrameHPmaxCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     focusFrameHPmaxCB:SetPoint("TOPLEFT", focusFrameHPcurrentCB, 0, -20)
     focusFrameHPmaxCB.Text:SetText(L.maxHP)
     focusFrameHPmaxCB:SetSize(16, 16)
     focusFrameHPmaxCB:SetScript("OnClick", function()
-        self.settings.focusFrameHPmaxEnabled = focusFrameHPmaxCB:GetChecked()
-        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        self.settings.frameHPMaxTextEnabled["focus"] = focusFrameHPmaxCB:GetChecked()
+        ChangeFrameHealthBarText(FocusFrameHealthBar)
     end)
-    focusFrameHPmaxCB:SetChecked(self.settings.focusFrameHPmaxEnabled)
+    focusFrameHPmaxCB:SetChecked(self.settings.frameHPMaxTextEnabled["focus"])
 
     focusFrameHPpercentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     focusFrameHPpercentCB:SetPoint("TOPLEFT", focusFrameHPmaxCB, 0, -20)
     focusFrameHPpercentCB.Text:SetText(L.percentHP)
     focusFrameHPpercentCB:SetSize(16, 16)
     focusFrameHPpercentCB:SetScript("OnClick", function()
-        self.settings.focusFrameHPpercentEnabled = focusFrameHPpercentCB:GetChecked()
-        ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
+        self.settings.frameHPPercentTextEnabled["focus"] = focusFrameHPpercentCB:GetChecked()
+        ChangeFrameHealthBarText(FocusFrameHealthBar)
     end)
-    focusFrameHPpercentCB:SetChecked(self.settings.focusFrameHPpercentEnabled)
+    focusFrameHPpercentCB:SetChecked(self.settings.frameHPPercentTextEnabled["focus"])
 
     focusFrameMPcurrentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     focusFrameMPcurrentCB:SetPoint("TOPLEFT", focusFrameHPcurrentCB, 250, 0)
     focusFrameMPcurrentCB.Text:SetText(L.currentMP)
     focusFrameMPcurrentCB:SetSize(16, 16)
     focusFrameMPcurrentCB:SetScript("OnClick", function()
-        self.settings.focusFrameMPcurrentEnabled = focusFrameMPcurrentCB:GetChecked()
-        ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        self.settings.frameMPTextEnabled["focus"] = focusFrameMPcurrentCB:GetChecked()
+        ChangeFrameManaBarText(FocusFrameManaBar)
     end)
-    focusFrameMPcurrentCB:SetChecked(self.settings.focusFrameMPcurrentEnabled)
+    focusFrameMPcurrentCB:SetChecked(self.settings.frameMPTextEnabled["focus"])
 
     focusFrameMPmaxCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     focusFrameMPmaxCB:SetPoint("TOPLEFT", focusFrameMPcurrentCB, 0, -20)
     focusFrameMPmaxCB.Text:SetText(L.maxMP)
     focusFrameMPmaxCB:SetSize(16, 16)
     focusFrameMPmaxCB:SetScript("OnClick", function()
-        self.settings.focusFrameMPmaxEnabled = focusFrameMPmaxCB:GetChecked()
-        ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        self.settings.frameMPMaxTextEnabled["focus"] = focusFrameMPmaxCB:GetChecked()
+        ChangeFrameManaBarText(FocusFrameManaBar)
     end)
-    focusFrameMPmaxCB:SetChecked(self.settings.focusFrameMPmaxEnabled)
+    focusFrameMPmaxCB:SetChecked(self.settings.frameMPMaxTextEnabled["focus"])
 
     focusFrameMPpercentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     focusFrameMPpercentCB:SetPoint("TOPLEFT", focusFrameMPmaxCB, 0, -20)
     focusFrameMPpercentCB.Text:SetText(L.percentMP)
     focusFrameMPpercentCB:SetSize(16, 16)
     focusFrameMPpercentCB:SetScript("OnClick", function()
-        self.settings.focusFrameMPpercentEnabled = focusFrameMPpercentCB:GetChecked()
-        ChangeFocusFrameManaBarText(FocusFrameManaBar)
+        self.settings.frameMPPercentTextEnabled["focus"] = focusFrameMPpercentCB:GetChecked()
+        ChangeFrameManaBarText(FocusFrameManaBar)
     end)
-    focusFrameMPpercentCB:SetChecked(self.settings.focusFrameMPpercentEnabled)
+    focusFrameMPpercentCB:SetChecked(self.settings.frameMPPercentTextEnabled["focus"])
+
+    if select(4, GetBuildInfo()) <= 30000 then
+        focusFrameText:Hide()
+        focusFrameCB:Hide()
+        focusFrameHPcurrentCB:Hide()
+        focusFrameHPmaxCB:Hide()
+        focusFrameHPpercentCB:Hide()
+        focusFrameMPcurrentCB:Hide()
+        focusFrameMPmaxCB:Hide()
+        focusFrameMPpercentCB:Hide()
+    end
 
     petFrameText = self.panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-    petFrameText:SetPoint("TOPLEFT", focusFrameText, 0, -120)
+    
+    if select(4, GetBuildInfo()) <= 30000 then
+        petFrameText:SetPoint("TOPLEFT", targetFrameText, 0, -120)
+    else
+        petFrameText:SetPoint("TOPLEFT", focusFrameText, 0, -120)
+    end
     petFrameText:SetText(L.petFrame)
 
     petFrameCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     petFrameCB:SetPoint("TOPLEFT", petFrameText, 0, -20)
     petFrameCB.Text:SetText(L.enablePetFrameText)
     petFrameCB:SetScript("OnClick", function()
-        self.settings.petFrameEnabled = petFrameCB:GetChecked()
+        self.settings.frameEnabled["pet"] = petFrameCB:GetChecked()
         self:updatePetCheckBoxes()
 
         if petFrameCB:GetChecked() == true then
-            ChangePetFrameHealthBarText(PetFrameHealthBar)
-            ChangePetFrameManaBarText(PetFrameManaBar)
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
         else
             resetUnitFrameHealth(PetFrameHealthBar)
             resetUnitFramePower(PetFrameManaBar)
         end
     end)
-    petFrameCB:SetChecked(self.settings.petFrameEnabled)
+    petFrameCB:SetChecked(self.settings.frameEnabled["pet"])
 
     petFrameHPcurrentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     petFrameHPcurrentCB:SetPoint("TOPLEFT", petFrameCB, 30, -35)
     petFrameHPcurrentCB.Text:SetText(L.currentHP)
     petFrameHPcurrentCB:SetSize(16, 16)
     petFrameHPcurrentCB:SetScript("OnClick", function()
-        self.settings.petFrameHPcurrentEnabled = petFrameHPcurrentCB:GetChecked()
-        ChangePetFrameHealthBarText(PetFrameHealthBar)
+        self.settings.frameHPTextEnabled["pet"] = petFrameHPcurrentCB:GetChecked()
+        ChangeFrameHealthBarText(PetFrameHealthBar)
     end)
-    petFrameHPcurrentCB:SetChecked(self.settings.petFrameHPcurrentEnabled)
+    petFrameHPcurrentCB:SetChecked(self.settings.frameHPTextEnabled["pet"])
 
     petFrameHPmaxCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     petFrameHPmaxCB:SetPoint("TOPLEFT", petFrameHPcurrentCB, 0, -20)
     petFrameHPmaxCB.Text:SetText(L.maxHP)
     petFrameHPmaxCB:SetSize(16, 16)
     petFrameHPmaxCB:SetScript("OnClick", function()
-        self.settings.petFrameHPmaxEnabled = petFrameHPmaxCB:GetChecked()
-        ChangePetFrameHealthBarText(PetFrameHealthBar)
+        self.settings.frameHPMaxTextEnabled["pet"] = petFrameHPmaxCB:GetChecked()
+        ChangeFrameHealthBarText(PetFrameHealthBar)
     end)
-    petFrameHPmaxCB:SetChecked(self.settings.petFrameHPmaxEnabled)
+    petFrameHPmaxCB:SetChecked(self.settings.frameHPMaxTextEnabled["pet"])
 
     petFrameHPpercentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     petFrameHPpercentCB:SetPoint("TOPLEFT", petFrameHPmaxCB, 0, -20)
     petFrameHPpercentCB.Text:SetText(L.percentHP)
     petFrameHPpercentCB:SetSize(16, 16)
     petFrameHPpercentCB:SetScript("OnClick", function()
-        self.settings.petFrameHPpercentEnabled = petFrameHPpercentCB:GetChecked()
-        ChangePetFrameHealthBarText(PetFrameHealthBar)
+        self.settings.frameHPPercentTextEnabled["pet"] = petFrameHPpercentCB:GetChecked()
+        ChangeFrameHealthBarText(PetFrameHealthBar)
     end)
-    petFrameHPpercentCB:SetChecked(self.settings.petFrameHPpercentEnabled)
+    petFrameHPpercentCB:SetChecked(self.settings.frameHPPercentTextEnabled["pet"])
 
     petFrameMPcurrentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     petFrameMPcurrentCB:SetPoint("TOPLEFT", petFrameHPcurrentCB, 250, 0)
     petFrameMPcurrentCB.Text:SetText(L.currentMP)
     petFrameMPcurrentCB:SetSize(16, 16)
     petFrameMPcurrentCB:SetScript("OnClick", function()
-        self.settings.petFrameMPcurrentEnabled = petFrameMPcurrentCB:GetChecked()
-        ChangePetFrameManaBarText(PetFrameManaBar)
+        self.settings.frameMPTextEnabled["pet"] = petFrameMPcurrentCB:GetChecked()
+        ChangeFrameManaBarText(PetFrameManaBar)
     end)
-    petFrameMPcurrentCB:SetChecked(self.settings.petFrameMPcurrentEnabled)
+    petFrameMPcurrentCB:SetChecked(self.settings.frameMPTextEnabled["pet"])
 
     petFrameMPmaxCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     petFrameMPmaxCB:SetPoint("TOPLEFT", petFrameMPcurrentCB, 0, -20)
     petFrameMPmaxCB.Text:SetText(L.maxMP)
     petFrameMPmaxCB:SetSize(16, 16)
     petFrameMPmaxCB:SetScript("OnClick", function()
-        self.settings.petFrameMPmaxEnabled = petFrameMPmaxCB:GetChecked()
-        ChangePetFrameManaBarText(PetFrameManaBar)
+        self.settings.frameMPMaxTextEnabled["pet"] = petFrameMPmaxCB:GetChecked()
+        ChangeFrameManaBarText(PetFrameManaBar)
     end)
-    petFrameMPmaxCB:SetChecked(self.settings.petFrameMPmaxEnabled)
+    petFrameMPmaxCB:SetChecked(self.settings.frameMPMaxTextEnabled["pet"])
 
     petFrameMPpercentCB = CreateFrame("CheckButton", nil, self.panel, "InterfaceOptionsCheckButtonTemplate")
     petFrameMPpercentCB:SetPoint("TOPLEFT", petFrameMPmaxCB, 0, -20)
     petFrameMPpercentCB.Text:SetText(L.percentMP)
     petFrameMPpercentCB:SetSize(16, 16)
     petFrameMPpercentCB:SetScript("OnClick", function()
-        self.settings.petFrameMPpercentEnabled = petFrameMPpercentCB:GetChecked()
-        ChangePetFrameManaBarText(PetFrameManaBar)
+        self.settings.frameMPPercentTextEnabled["pet"] = petFrameMPpercentCB:GetChecked()
+        ChangeFrameManaBarText(PetFrameManaBar)
     end)
-    petFrameMPpercentCB:SetChecked(self.settings.petFrameMPpercentEnabled)
+    petFrameMPpercentCB:SetChecked(self.settings.frameMPPercentTextEnabled["pet"])
 
     self:updatePlayerCheckBoxes()
     self:updateTargetCheckBoxes()
@@ -535,16 +562,16 @@ function CUFFrame:InitializeOptions()
         end
 
         if CUFFrame.settings.globalEnabled == true then
-            ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
-            ChangePlayerFrameManaBarText(PlayerFrameManaBar)
-            ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
-            ChangeTargetFrameManaBarText(TargetFrameManaBar)
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
             if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
             end
-            ChangePetFrameHealthBarText(PetFrameHealthBar)
-            ChangePetFrameManaBarText(PetFrameManaBar)
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
         end
 
         CloseDropDownMenus()
@@ -566,16 +593,16 @@ function CUFFrame:InitializeOptions()
         CUFFrame.settings.fontSize = value
 
         if CUFFrame.settings.globalEnabled == true then
-            ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
-            ChangePlayerFrameManaBarText(PlayerFrameManaBar)
-            ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
-            ChangeTargetFrameManaBarText(TargetFrameManaBar)
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
             if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
             end
-            ChangePetFrameHealthBarText(PetFrameHealthBar)
-            ChangePetFrameManaBarText(PetFrameManaBar)
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
         end
     end)
 
@@ -638,16 +665,16 @@ function CUFFrame:InitializeOptions()
         UIDropDownMenu_SetText(formattingDropDownMenu, formatting)
 
         if CUFFrame.settings.globalEnabled == true then
-            ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
-            ChangePlayerFrameManaBarText(PlayerFrameManaBar)
-            ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
-            ChangeTargetFrameManaBarText(TargetFrameManaBar)
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
             if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
             end
-            ChangePetFrameHealthBarText(PetFrameHealthBar)
-            ChangePetFrameManaBarText(PetFrameManaBar)
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
         end
 
         CloseDropDownMenus()
@@ -712,16 +739,16 @@ function CUFFrame:InitializeOptions()
         UIDropDownMenu_SetText(bigNumbersDropDown, bigNumber)
 
         if CUFFrame.settings.globalEnabled == true then
-            ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
-            ChangePlayerFrameManaBarText(PlayerFrameManaBar)
-            ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
-            ChangeTargetFrameManaBarText(TargetFrameManaBar)
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
             if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
             end
-            ChangePetFrameHealthBarText(PetFrameHealthBar)
-            ChangePetFrameManaBarText(PetFrameManaBar)
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
         end
 
         CloseDropDownMenus()
@@ -743,16 +770,16 @@ function CUFFrame:InitializeOptions()
         CUFFrame.settings.percentAccuracy = value
 
         if CUFFrame.settings.globalEnabled == true then
-            ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
-            ChangePlayerFrameManaBarText(PlayerFrameManaBar)
-            ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
-            ChangeTargetFrameManaBarText(TargetFrameManaBar)
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
             if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
             end
-            ChangePetFrameHealthBarText(PetFrameHealthBar)
-            ChangePetFrameManaBarText(PetFrameManaBar)
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
         end
     end)
 
@@ -768,16 +795,16 @@ function CUFFrame:InitializeOptions()
         self.settings.showPercentForSmallNumbers = showPercentForSmallPowerCB:GetChecked()
 
         if CUFFrame.settings.globalEnabled == true then
-            ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
-            ChangePlayerFrameManaBarText(PlayerFrameManaBar)
-            ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
-            ChangeTargetFrameManaBarText(TargetFrameManaBar)
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
             if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
             end
-            ChangePetFrameHealthBarText(PetFrameHealthBar)
-            ChangePetFrameManaBarText(PetFrameManaBar)
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
         end
     end)
 
@@ -790,16 +817,16 @@ function CUFFrame:InitializeOptions()
             self.settings.showPercentForClassicPlayers = showPercentForClassicPlayersCB:GetChecked()
 
             if CUFFrame.settings.globalEnabled == true then
-                ChangePlayerFrameHealthBarText(PlayerFrameHealthBar)
-                ChangePlayerFrameManaBarText(PlayerFrameManaBar)
-                ChangeTargetFrameHealthBarText(TargetFrameHealthBar)
-                ChangeTargetFrameManaBarText(TargetFrameManaBar)
+                ChangeFrameHealthBarText(PlayerFrameHealthBar)
+                ChangeFrameManaBarText(PlayerFrameManaBar)
+                ChangeFrameHealthBarText(TargetFrameHealthBar)
+                ChangeFrameManaBarText(TargetFrameManaBar)
                 if select(4, GetBuildInfo()) >= 30000 then
-                    ChangeFocusFrameHealthBarText(FocusFrameHealthBar)
-                    ChangeFocusFrameManaBarText(FocusFrameManaBar)
+                    ChangeFrameHealthBarText(FocusFrameHealthBar)
+                    ChangeFrameManaBarText(FocusFrameManaBar)
                 end
-                ChangePetFrameHealthBarText(PetFrameHealthBar)
-                ChangePetFrameManaBarText(PetFrameManaBar)
+                ChangeFrameHealthBarText(PetFrameHealthBar)
+                ChangeFrameManaBarText(PetFrameManaBar)
             end
         end)
     end
@@ -827,15 +854,6 @@ function CUFFrame:updateTargetCheckBoxes()
 end
 
 function CUFFrame:updateFocusCheckBoxes()
-    if select(4, GetBuildInfo()) <= 30000 then
-        focusFrameCB:SetEnabled(false)
-        focusFrameHPcurrentCB:SetEnabled(false)
-        focusFrameHPmaxCB:SetEnabled(false)
-        focusFrameHPpercentCB:SetEnabled(false)
-        focusFrameMPcurrentCB:SetEnabled(false)
-        focusFrameMPmaxCB:SetEnabled(false)
-        focusFrameMPpercentCB:SetEnabled(false)
-    else
     focusFrameCB:SetEnabled(enabledCB:GetChecked())
     focusFrameHPcurrentCB:SetEnabled(enabledCB:GetChecked() and focusFrameCB:GetChecked())
     focusFrameHPmaxCB:SetEnabled(enabledCB:GetChecked() and focusFrameCB:GetChecked())
@@ -843,7 +861,6 @@ function CUFFrame:updateFocusCheckBoxes()
     focusFrameMPcurrentCB:SetEnabled(enabledCB:GetChecked() and focusFrameCB:GetChecked())
     focusFrameMPmaxCB:SetEnabled(enabledCB:GetChecked() and focusFrameCB:GetChecked())
     focusFrameMPpercentCB:SetEnabled(enabledCB:GetChecked() and focusFrameCB:GetChecked())
-    end
 end
 
 function CUFFrame:updatePetCheckBoxes()
