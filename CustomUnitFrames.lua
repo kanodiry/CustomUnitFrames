@@ -65,8 +65,7 @@ local function NumToStrConverterMetric(value)
     if value < CUFFrame.settings.bigNumbers then
         return tostring(value)
     end
-    
-    
+
     local metricForm = {[3] = "K", [6] = "M", [9] = "B"}
     local outLength = CUFFrame.settings.bigNumbersLength;
     local valueLength = math.floor(math.log10(value)) + 1
