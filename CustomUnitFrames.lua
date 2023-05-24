@@ -66,15 +66,20 @@ local function NumToStrConverterMetric(value)
         return tostring(value)
     end
     
-    if value < 10000 then
-        return string.format("%.3fK", value / 1000)
-    elseif value < 1000000 then
-        return string.format("%.2fK", value / 1000)
-    elseif value < 1000000000 then
-        return string.format("%.2fM", value / 1000000)
-    elseif value < 1000000000000 then
-        return string.format("%.2fB", value / 1000000000)
+    
+    local metricForm = {[3] = "K", [6] = "M", [9] = "B"}
+    local outLength = CUFFrame.settings.bigNumbersLength;
+    local valueLength = math.floor(math.log10(value)) + 1
+    
+    if outLength > valueLength then
+        outLength = valueLength
     end
+
+    local exponent = math.floor((valueLength - 1) / 3) * 3
+    local mult = 10 ^ exponent
+    local formatOffset = (valueLength - 1) % 3 + 1
+
+    return string.format("%."..outLength-formatOffset .."f"..metricForm[exponent], value / mult)
 end
 
 local function PercentAccuracy(value, accuracy)

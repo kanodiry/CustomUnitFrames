@@ -52,7 +52,8 @@ CUFFrame.defaults = {
     fontSize = 13.5,
 
     selectedFormat = 1,
-    bigNumbers = 3,
+    bigNumbersLength = 4,
+    bigNumbers = 100000,
     percentAccuracy = 1,
 
     showPercentForSmallNumbers = false,
@@ -81,6 +82,11 @@ function CUFFrame:InitializeOptions()
         self:updatePetCheckBoxes()
 
         if enabledCB:GetChecked() == true then
+            playerFrameText:SetFontObject("GameFontNormal")
+            targetFrameText:SetFontObject("GameFontNormal")
+            focusFrameText:SetFontObject("GameFontNormal")
+            petFrameText:SetFontObject("GameFontNormal")
+
             ChangeFrameHealthBarText(PlayerFrameHealthBar)
             ChangeFrameManaBarText(PlayerFrameManaBar)
             ChangeFrameHealthBarText(TargetFrameHealthBar)
@@ -92,6 +98,11 @@ function CUFFrame:InitializeOptions()
             ChangeFrameHealthBarText(PetFrameHealthBar)
             ChangeFrameManaBarText(PetFrameManaBar)
         else
+            playerFrameText:SetFontObject("GameFontDisable")
+            targetFrameText:SetFontObject("GameFontDisable")
+            focusFrameText:SetFontObject("GameFontDisable")
+            petFrameText:SetFontObject("GameFontDisable")
+
             resetUnitFrameHealth(PlayerFrameHealthBar)
             resetUnitFramePower(PlayerFrameManaBar)
             resetUnitFrameHealth(TargetFrameHealthBar)
@@ -633,7 +644,7 @@ function CUFFrame:InitializeOptions()
     if self.settings.selectedFormat == 1 then
         UIDropDownMenu_SetText(formattingDropDownMenu, "Blizzard: 1234567 -> 1234"..L.thousandLetter)
     else
-        UIDropDownMenu_SetText(formattingDropDownMenu, "Metric: 123456 -> 123.4K")
+        UIDropDownMenu_SetText(formattingDropDownMenu, L.metric..": 123456 -> 123.4K")
     end
 
     formattingSelectionTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -651,7 +662,7 @@ function CUFFrame:InitializeOptions()
         formatStyle.arg2 = formatStyle.text
         UIDropDownMenu_AddButton(formatStyle)
 
-        formatStyle.text = "Metric: 123456 -> 123.4K"
+        formatStyle.text = L.metric..": 123456 -> 123.4K"
         formatStyle.value = 2
         formatStyle.checked = formatStyle.value == CUFFrame.settings.selectedFormat
         formatStyle.func = self.SetValue
@@ -663,6 +674,16 @@ function CUFFrame:InitializeOptions()
     function formattingDropDownMenu:SetValue(newValue, formatting)
         CUFFrame.settings.selectedFormat = newValue
         UIDropDownMenu_SetText(formattingDropDownMenu, formatting)
+        
+        if newValue == 1 then
+            bigNumbersLengthSlider:SetEnabled(false)
+            bigNumbersLengthTitle:SetFontObject("GameFontDisable")
+            bigNumbersLengthValue:SetFontObject("GameFontDisable")
+        else
+            bigNumbersLengthSlider:SetEnabled(true)
+            bigNumbersLengthTitle:SetFontObject("GameFontNormal")
+            bigNumbersLengthValue:SetFontObject("GameFontNormal")
+        end
 
         if CUFFrame.settings.globalEnabled == true then
             ChangeFrameHealthBarText(PlayerFrameHealthBar)
@@ -680,17 +701,64 @@ function CUFFrame:InitializeOptions()
         CloseDropDownMenus()
     end
 
+    bigNumbersLengthSlider = CreateFrame("Slider", "BigNumbersLengthSlider", self.panel_visual, "OptionsSliderTemplate")
+    bigNumbersLengthSlider:SetSize(180, 20)
+    bigNumbersLengthSlider:SetPoint("TOPLEFT", formattingDropDownMenu, 250, 0)
+    bigNumbersLengthSlider:SetMinMaxValues(3, 6)
+    bigNumbersLengthSlider:SetValueStep(1)
+    bigNumbersLengthSlider:SetValue(CUFFrame.settings.bigNumbersLength)
+    bigNumbersLengthSlider:SetOrientation("HORIZONTAL")
+    bigNumbersLengthSlider:SetObeyStepOnDrag(true)
+    BigNumbersLengthSliderLow:SetText("3")
+    BigNumbersLengthSliderHigh:SetText("6")
+
+    bigNumbersLengthSlider:SetScript("OnValueChanged", function(self, value)
+        bigNumbersLengthValue:SetText(tostring(value))
+        CUFFrame.settings.bigNumbersLength = value
+
+        if CUFFrame.settings.globalEnabled == true then
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
+            end
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
+        end
+    end)
+
+    bigNumbersLengthTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    bigNumbersLengthTitle:SetPoint("TOPLEFT", bigNumbersLengthSlider, 0, 20)
+    bigNumbersLengthTitle:SetText(L.bigNumbersLenght)
+
+    bigNumbersLengthValue = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    bigNumbersLengthValue:SetPoint("TOPRIGHT", bigNumbersLengthSlider, 20, -4)
+    bigNumbersLengthValue:SetText(tostring(CUFFrame.settings.bigNumbersLength))
+
+    if CUFFrame.settings.selectedFormat == 1 then
+        bigNumbersLengthSlider:SetEnabled(false)
+        bigNumbersLengthTitle:SetFontObject("GameFontDisable")
+        bigNumbersLengthValue:SetFontObject("GameFontDisable")
+    else
+        bigNumbersLengthSlider:SetEnabled(true)
+        bigNumbersLengthTitle:SetFontObject("GameFontNormal")
+        bigNumbersLengthValue:SetFontObject("GameFontNormal")
+    end
+
     bigNumbersDropDown = CreateFrame("Frame", "BigNumbersDropDown", self.panel_visual, "UIDropDownMenuTemplate")
     bigNumbersDropDown:SetPoint("TOPLEFT", formattingDropDownMenu, 0, -80)
     UIDropDownMenu_SetWidth(bigNumbersDropDown, 180)
 
-    if self.settings.bigNumbers == 1 then
+    if self.settings.bigNumbers == 1000 then
         UIDropDownMenu_SetText(bigNumbersDropDown, "1.000")
-    elseif self.settings.bigNumbers == 2 then
+    elseif self.settings.bigNumbers == 10000 then
         UIDropDownMenu_SetText(bigNumbersDropDown, "10.000")
-    elseif self.settings.bigNumbers == 3 then
+    elseif self.settings.bigNumbers == 100000 then
         UIDropDownMenu_SetText(bigNumbersDropDown, "100.000")
-    elseif self.settings.bigNumbers == 4 then
+    elseif self.settings.bigNumbers == 1000000 then
         UIDropDownMenu_SetText(bigNumbersDropDown, "1.000.000")
     end
 
@@ -762,11 +830,11 @@ function CUFFrame:InitializeOptions()
     percentAccuracySlider:SetValue(CUFFrame.settings.percentAccuracy)
     percentAccuracySlider:SetOrientation("HORIZONTAL")
     percentAccuracySlider:SetObeyStepOnDrag(true)
-    PercentAccuracySliderLow:SetText("0 to 4")
-    PercentAccuracySliderHigh:SetText(tostring(CUFFrame.settings.percentAccuracy))
+    PercentAccuracySliderLow:SetText("0")
+    PercentAccuracySliderHigh:SetText("4")
 
     percentAccuracySlider:SetScript("OnValueChanged", function(self, value)
-        PercentAccuracySliderHigh:SetText(tostring(value))
+        percentAccuracyValue:SetText(tostring(value))
         CUFFrame.settings.percentAccuracy = value
 
         if CUFFrame.settings.globalEnabled == true then
@@ -786,6 +854,10 @@ function CUFFrame:InitializeOptions()
     percentAccuracyTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
     percentAccuracyTitle:SetPoint("TOPLEFT", percentAccuracySlider, 0, 20)
     percentAccuracyTitle:SetText(L.percentAccuracy)
+
+    percentAccuracyValue = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    percentAccuracyValue:SetPoint("TOPRIGHT", percentAccuracySlider, 20, -4)
+    percentAccuracyValue:SetText(tostring(CUFFrame.settings.percentAccuracy))
 
     showPercentForSmallPowerCB = CreateFrame("CheckButton", "ShowPercentForSmallPowerCB", self.panel_visual, "InterfaceOptionsCheckButtonTemplate")
     showPercentForSmallPowerCB:SetPoint("TOPLEFT", percentAccuracySlider, 0, -50)
