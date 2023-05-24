@@ -645,7 +645,7 @@ function CUFFrame:InitializeOptions()
     if self.settings.selectedFormat == 1 then
         UIDropDownMenu_SetText(formattingDropDownMenu, "Blizzard: 1234567 -> 1234K")
     else
-        UIDropDownMenu_SetText(formattingDropDownMenu, "Metric: 123456 -> 123.4K")
+        UIDropDownMenu_SetText(formattingDropDownMenu, Addon.L.metric..": 123456 -> 123.4K")
     end
 
     formattingSelectionTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -663,7 +663,7 @@ function CUFFrame:InitializeOptions()
         formatStyle.arg2 = formatStyle.text
         UIDropDownMenu_AddButton(formatStyle)
 
-        formatStyle.text = "Metric: 123456 -> 123.4K"
+        formatStyle.text = Addon.L.metric..": 123456 -> 123.4K"
         formatStyle.value = 2
         formatStyle.checked = formatStyle.value == CUFFrame.settings.selectedFormat
         formatStyle.func = self.SetValue

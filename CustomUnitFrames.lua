@@ -60,7 +60,7 @@ local function NumToStrConverterBlizzard(value)
     end
 
     if value < 100000000 then
-        return string.format("%.0f"..L.thousandLetter, value / 1000)
+        return string.format("%.0f"..Addon.L.thousandLetter, value / 1000)
     else
         return string.format("%.0fM", value / 1000000)
     end
