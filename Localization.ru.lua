@@ -24,15 +24,19 @@ L.percentMP = "% ресурса"
 
 L.visualSettings = "Параметры Отображения"
 L.fontSettings = "Параметры Шрифта"
-L.fontType = "Шрифт"
-L.fontSize = "Размер шрифта"
+L.fontType = "Шрифт:"
+L.fontSize = "Размер шрифта:"
 
 L.formatBigNumbers = "Сокращение больших чисел"
-L.formatStyle = "Стиль сокращения"
+L.formatStyle = "Стиль сокращения:"
+L.bigNumbersLenght = "Длина сокращенного числа:"
+
+L.metric = "Стандарт"
 
 L.countBigNumbers = "Считать числа большими, начиная c:"
-L.percentAccuracy = "Точность % (после запятой)"
 
+L.percentAccuracy = "Точность % (после запятой):"
+L.percentSeparator = "Символ(ы) для разделения % значения:"
 L.showPercSmallNumbers = "Показывать % для малых чисел (до 150)"
 L.showPercentClassicPlayers = "Показывать % Здоровья Игроков в мире"
 
