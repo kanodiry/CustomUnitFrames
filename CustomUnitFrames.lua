@@ -12,6 +12,11 @@ function CUFFrame:Init(event, addOnName)
 				CUFFrame.settings[key] = value
 			end
 		end
+        
+        if CUFFrame.settings.bigNumbers < 10 then
+            CUFFrame.settings.bigNumbers = CUFFrame.defaults.bigNumbers
+        end
+
         self:InitializeOptions()
 
         if select(4, GetBuildInfo()) <= 30000 then

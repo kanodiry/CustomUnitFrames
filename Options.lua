@@ -643,9 +643,9 @@ function CUFFrame:InitializeOptions()
     formattingDropDownMenu:SetPoint("TOPLEFT", formattingTitle, 0, -45)
     UIDropDownMenu_SetWidth(formattingDropDownMenu, 180)
     if self.settings.selectedFormat == 1 then
-        UIDropDownMenu_SetText(formattingDropDownMenu, "Blizzard: 1234567 -> 1234"..L.thousandLetter)
+        UIDropDownMenu_SetText(formattingDropDownMenu, "Blizzard: 1234567 -> 1234K")
     else
-        UIDropDownMenu_SetText(formattingDropDownMenu, L.metric..": 123456 -> 123.4K")
+        UIDropDownMenu_SetText(formattingDropDownMenu, "Metric: 123456 -> 123.4K")
     end
 
     formattingSelectionTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -655,7 +655,7 @@ function CUFFrame:InitializeOptions()
     UIDropDownMenu_Initialize(formattingDropDownMenu, function(self, level, menuList)
         local formatStyle = UIDropDownMenu_CreateInfo()
 
-        formatStyle.text = "Blizzard: 1234567 -> 1234"..L.thousandLetter
+        formatStyle.text = "Blizzard: 1234567 -> 1234K"
         formatStyle.value = 1
         formatStyle.checked = formatStyle.value == CUFFrame.settings.selectedFormat
         formatStyle.func = self.SetValue
@@ -663,7 +663,7 @@ function CUFFrame:InitializeOptions()
         formatStyle.arg2 = formatStyle.text
         UIDropDownMenu_AddButton(formatStyle)
 
-        formatStyle.text = L.metric..": 123456 -> 123.4K"
+        formatStyle.text = "Metric: 123456 -> 123.4K"
         formatStyle.value = 2
         formatStyle.checked = formatStyle.value == CUFFrame.settings.selectedFormat
         formatStyle.func = self.SetValue

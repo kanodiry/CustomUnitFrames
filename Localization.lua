@@ -29,16 +29,12 @@ local L = {
     formatStyle = "Abbreviate Style:",
     bigNumbersLenght = "Length of reduced numbers:",
 
-    metric = "Metric",
-
     countBigNumbers = "Count the numbers as Large starting at:",
 
     percentAccuracy = "% Accuracy (decimal places):",
     percentSeparator = "Character(s) to separate % value:",
     showPercSmallNumbers = "Show % for small numbers (up to 150)",
     showPercentClassicPlayers = "Show % of Health for Players in the world",
-
-    thousandLetter = "K"
 }
 
 Addon.L = setmetatable(L, { __index = function(t, k) return k end })
