@@ -112,6 +112,12 @@ function ChangeFrameHealthBarText(self)
     end
 
     local resultStr = ""
+    local separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1)
+    local separatorEnd = string.sub(CUFFrame.settings.percentSeparator, 2, 2)
+
+    if separatorEnd == "" then
+        separatorStart = separatorStart.." "
+    end
 
     if CUFFrame.settings.frameHPTextEnabled[self.unit] == true then
         resultStr = resultStr..healthStr
@@ -128,7 +134,8 @@ function ChangeFrameHealthBarText(self)
         if CUFFrame.settings.frameHPPercentTextEnabled[self.unit] == true then
             if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
                 if resultStr ~= "" then
-                    resultStr = resultStr.." "..healthPercent
+                    resultStr = resultStr.." "..
+                    separatorStart..healthPercent..separatorEnd
                 else
                     resultStr = healthPercent
                 end
@@ -170,6 +177,12 @@ function ChangeFrameManaBarText(self)
     end
 
     local resultStr = ""
+    local separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1)
+    local separatorEnd = string.sub(CUFFrame.settings.percentSeparator, 2, 2)
+
+    if separatorEnd == "" then
+        separatorStart = separatorStart.." "
+    end
 
     if CUFFrame.settings.frameMPTextEnabled[self.unit] == true then
         resultStr = resultStr..manaStr
@@ -184,7 +197,8 @@ function ChangeFrameManaBarText(self)
     if CUFFrame.settings.frameMPPercentTextEnabled[self.unit] == true then
         if manaMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
             if resultStr ~= "" then
-                resultStr = resultStr.." "..manaPercent
+                resultStr = resultStr.." "..
+                separatorStart..manaPercent..separatorEnd
             else
                 resultStr = manaPercent
             end

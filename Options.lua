@@ -56,6 +56,7 @@ CUFFrame.defaults = {
     bigNumbers = 100000,
     percentAccuracy = 1,
 
+    percentSeparator = "()",
     showPercentForSmallNumbers = false,
     showPercentForClassicPlayers = false
 }
@@ -859,8 +860,37 @@ function CUFFrame:InitializeOptions()
     percentAccuracyValue:SetPoint("TOPRIGHT", percentAccuracySlider, 20, -4)
     percentAccuracyValue:SetText(tostring(CUFFrame.settings.percentAccuracy))
 
+    percentSeparatorTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    percentSeparatorTitle:SetPoint("TOPLEFT", percentAccuracySlider, 0, -50)
+    percentSeparatorTitle:SetText(L.percentSeparator)
+
+    percentSeparatorEditBox = CreateFrame("EditBox", "PercentSeparatorEditBox", self.panel_visual, "InputBoxTemplate")
+    percentSeparatorEditBox:SetSize(50, 20)
+    percentSeparatorEditBox:SetPoint("TOPLEFT", percentSeparatorTitle, 20, -25)
+    percentSeparatorEditBox:SetFontObject("GameFontHighlight")
+    percentSeparatorEditBox:SetAutoFocus(false)
+    percentSeparatorEditBox:SetText(CUFFrame.settings.percentSeparator)
+    percentSeparatorEditBox:SetCursorPosition(0)
+    percentSeparatorEditBox:SetScript("OnEnterPressed", function(self)
+        CUFFrame.settings.percentSeparator = self:GetText()
+        self:ClearFocus()
+
+        if CUFFrame.settings.globalEnabled == true then
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
+            end
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
+        end
+    end)
+
     showPercentForSmallPowerCB = CreateFrame("CheckButton", "ShowPercentForSmallPowerCB", self.panel_visual, "InterfaceOptionsCheckButtonTemplate")
-    showPercentForSmallPowerCB:SetPoint("TOPLEFT", percentAccuracySlider, 0, -50)
+    showPercentForSmallPowerCB:SetPoint("TOPLEFT", percentSeparatorTitle, 0, -60)
     showPercentForSmallPowerCB.Text:SetText(L.showPercSmallNumbers)
     showPercentForSmallPowerCB:SetChecked(self.settings.showPercentForSmallNumbers)
     showPercentForSmallPowerCB:SetScript("OnClick", function()
