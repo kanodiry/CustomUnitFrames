@@ -29,7 +29,8 @@ L.fontSize = "Размер шрифта:"
 
 L.formatBigNumbers = "Сокращение больших чисел"
 L.formatStyle = "Стиль сокращения:"
-L.bigNumbersLenght = "Длина сокращенного числа:"
+L.bigNumbersLenght = "Длина чисел (с целой частью):"
+L.bigNumbersDecimals = "Показывать десятичные дроби"
 
 L.metric = "Стандарт"
 

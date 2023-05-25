@@ -27,7 +27,8 @@ local L = {
 
     formatBigNumbers = "Abbreviate Large Numbers",
     formatStyle = "Abbreviate Style:",
-    bigNumbersLenght = "Length of reduced numbers:",
+    bigNumbersLenght = "Length of numbers (with an integer part):",
+    bigNumbersDecimals = "Show decimals",
 
     metric = "Metric",
 
