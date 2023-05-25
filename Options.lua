@@ -1,3 +1,6 @@
+local _, Addon = ...
+local L = Addon.L
+
 CUFFrame.defaults = {
     defaultFrameFont = "Fonts/ARIALN.TTF",
     defaultFrameFontSize = 13.999999046326,
@@ -53,6 +56,7 @@ CUFFrame.defaults = {
 
     selectedFormat = 1,
     bigNumbersLength = 4,
+    bigNumbersDecimalsEnabled = true,
     bigNumbers = 100000,
     percentAccuracy = 1,
 
@@ -591,7 +595,7 @@ function CUFFrame:InitializeOptions()
 
     fontSizeSlider = CreateFrame("Slider", "FontSizeSlider", self.panel_visual, "OptionsSliderTemplate")
     fontSizeSlider:SetSize(180, 20)
-    fontSizeSlider:SetPoint("TOPLEFT", fontDropDownMenu, 250, 0)
+    fontSizeSlider:SetPoint("TOPLEFT", fontDropDownMenu, 270, 0)
     fontSizeSlider:SetMinMaxValues(1, 20)
     fontSizeSlider:SetValueStep(0.05)
     fontSizeSlider:SetValue(self.settings.fontSize)
@@ -632,7 +636,7 @@ function CUFFrame:InitializeOptions()
     end)
 
     fontSizeTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-    fontSizeTitle:SetPoint("TOPLEFT", fontSelectionTitle, 230, 0)
+    fontSizeTitle:SetPoint("TOPLEFT", fontSizeSlider, 0, 20)
     fontSizeTitle:SetText(L.fontSize)
 
     formattingTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -676,14 +680,18 @@ function CUFFrame:InitializeOptions()
         CUFFrame.settings.selectedFormat = newValue
         UIDropDownMenu_SetText(formattingDropDownMenu, formatting)
         
-        if newValue == 1 then
-            bigNumbersLengthSlider:SetEnabled(false)
-            bigNumbersLengthTitle:SetFontObject("GameFontDisable")
-            bigNumbersLengthValue:SetFontObject("GameFontDisable")
-        else
+        if newValue == 2 then
             bigNumbersLengthSlider:SetEnabled(true)
+            showBigNumbersDecimalsCB:SetEnabled(true)
             bigNumbersLengthTitle:SetFontObject("GameFontNormal")
             bigNumbersLengthValue:SetFontObject("GameFontNormal")
+            showBigNumbersDecimalsCB.Text:SetFontObject("GameFontNormal")
+        else
+            bigNumbersLengthSlider:SetEnabled(false)
+            showBigNumbersDecimalsCB:SetEnabled(false)
+            bigNumbersLengthTitle:SetFontObject("GameFontDisable")
+            bigNumbersLengthValue:SetFontObject("GameFontDisable")
+            showBigNumbersDecimalsCB.Text:SetFontObject("GameFontDisable")
         end
 
         if CUFFrame.settings.globalEnabled == true then
@@ -702,9 +710,40 @@ function CUFFrame:InitializeOptions()
         CloseDropDownMenus()
     end
 
+    showBigNumbersDecimalsCB = CreateFrame("CheckButton", "ShowBigNumbersDecimalsCB", self.panel_visual, "InterfaceOptionsCheckButtonTemplate")
+    showBigNumbersDecimalsCB:SetPoint("TOPLEFT", formattingDropDownMenu, 20, -45)
+    showBigNumbersDecimalsCB:SetChecked(CUFFrame.settings.bigNumbersDecimalsEnabled)
+    showBigNumbersDecimalsCB.Text:SetText(L.bigNumbersDecimals)
+    showBigNumbersDecimalsCB:SetScript("OnClick", function(self)
+        CUFFrame.settings.bigNumbersDecimalsEnabled = self:GetChecked()
+
+        if CUFFrame.settings.selectedFormat == 2 and CUFFrame.settings.bigNumbersDecimalsEnabled == true then
+            bigNumbersLengthSlider:SetEnabled(true)
+            bigNumbersLengthTitle:SetFontObject("GameFontNormal")
+            bigNumbersLengthValue:SetFontObject("GameFontNormal")
+        else
+            bigNumbersLengthSlider:SetEnabled(false)
+            bigNumbersLengthTitle:SetFontObject("GameFontDisable")
+            bigNumbersLengthValue:SetFontObject("GameFontDisable")
+        end
+
+        if CUFFrame.settings.globalEnabled == true then
+            ChangeFrameHealthBarText(PlayerFrameHealthBar)
+            ChangeFrameManaBarText(PlayerFrameManaBar)
+            ChangeFrameHealthBarText(TargetFrameHealthBar)
+            ChangeFrameManaBarText(TargetFrameManaBar)
+            if select(4, GetBuildInfo()) >= 30000 then
+                ChangeFrameHealthBarText(FocusFrameHealthBar)
+                ChangeFrameManaBarText(FocusFrameManaBar)
+            end
+            ChangeFrameHealthBarText(PetFrameHealthBar)
+            ChangeFrameManaBarText(PetFrameManaBar)
+        end
+    end)
+
     bigNumbersLengthSlider = CreateFrame("Slider", "BigNumbersLengthSlider", self.panel_visual, "OptionsSliderTemplate")
     bigNumbersLengthSlider:SetSize(180, 20)
-    bigNumbersLengthSlider:SetPoint("TOPLEFT", formattingDropDownMenu, 250, 0)
+    bigNumbersLengthSlider:SetPoint("TOPLEFT", showBigNumbersDecimalsCB, 250, 0)
     bigNumbersLengthSlider:SetMinMaxValues(3, 6)
     bigNumbersLengthSlider:SetValueStep(1)
     bigNumbersLengthSlider:SetValue(CUFFrame.settings.bigNumbersLength)
@@ -739,18 +778,26 @@ function CUFFrame:InitializeOptions()
     bigNumbersLengthValue:SetPoint("TOPRIGHT", bigNumbersLengthSlider, 20, -4)
     bigNumbersLengthValue:SetText(tostring(CUFFrame.settings.bigNumbersLength))
 
-    if CUFFrame.settings.selectedFormat == 1 then
-        bigNumbersLengthSlider:SetEnabled(false)
-        bigNumbersLengthTitle:SetFontObject("GameFontDisable")
-        bigNumbersLengthValue:SetFontObject("GameFontDisable")
-    else
+    if CUFFrame.settings.selectedFormat == 2 and CUFFrame.settings.bigNumbersDecimalsEnabled == true then
         bigNumbersLengthSlider:SetEnabled(true)
         bigNumbersLengthTitle:SetFontObject("GameFontNormal")
         bigNumbersLengthValue:SetFontObject("GameFontNormal")
+    else
+        bigNumbersLengthSlider:SetEnabled(false)
+        bigNumbersLengthTitle:SetFontObject("GameFontDisable")
+        bigNumbersLengthValue:SetFontObject("GameFontDisable")
+    end
+
+    if CUFFrame.settings.selectedFormat == 2 then
+        showBigNumbersDecimalsCB:SetEnabled(true)
+        showBigNumbersDecimalsCB.Text:SetFontObject("GameFontNormal")
+    else
+        showBigNumbersDecimalsCB:SetEnabled(false)
+        showBigNumbersDecimalsCB.Text:SetFontObject("GameFontDisable")
     end
 
     bigNumbersDropDown = CreateFrame("Frame", "BigNumbersDropDown", self.panel_visual, "UIDropDownMenuTemplate")
-    bigNumbersDropDown:SetPoint("TOPLEFT", formattingDropDownMenu, 0, -80)
+    bigNumbersDropDown:SetPoint("TOPLEFT", showBigNumbersDecimalsCB, -20, -60)
     UIDropDownMenu_SetWidth(bigNumbersDropDown, 180)
 
     if self.settings.bigNumbers == 1000 then
@@ -825,7 +872,7 @@ function CUFFrame:InitializeOptions()
 
     percentAccuracySlider = CreateFrame("Slider", "PercentAccuracySlider", self.panel_visual, "OptionsSliderTemplate")
     percentAccuracySlider:SetSize(180, 20)
-    percentAccuracySlider:SetPoint("TOPLEFT", bigNumbersDropDown, 20, -80)
+    percentAccuracySlider:SetPoint("TOPLEFT", bigNumbersDropDown, 20, -70)
     percentAccuracySlider:SetMinMaxValues(0, 4)
     percentAccuracySlider:SetValueStep(1)
     percentAccuracySlider:SetValue(CUFFrame.settings.percentAccuracy)

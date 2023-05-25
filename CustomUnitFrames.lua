@@ -1,5 +1,5 @@
-_, Addon = ...
-L = Addon.L
+local _, Addon = ...
+local L = Addon.L
 
 CUFFrame = CreateFrame("Frame")
 
@@ -81,7 +81,13 @@ local function NumToStrConverterMetric(value)
 
     local exponent = math.floor((valueLength - 1) / 3) * 3
     local mult = 10 ^ exponent
-    local formatOffset = (valueLength - 1) % 3 + 1
+    local formatOffset = 0
+
+    if CUFFrame.settings.bigNumbersDecimalsEnabled == true then
+        formatOffset = (valueLength - 1) % 3 + 1
+    else
+        formatOffset = outLength
+    end
 
     return string.format("%."..outLength-formatOffset .."f"..metricForm[exponent], value / mult)
 end
