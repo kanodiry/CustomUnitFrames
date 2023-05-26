@@ -597,7 +597,7 @@ function CUFFrame:InitializeOptions()
     fontSizeSlider:SetSize(180, 20)
     fontSizeSlider:SetPoint("TOPLEFT", fontDropDownMenu, 270, 0)
     fontSizeSlider:SetMinMaxValues(1, 20)
-    fontSizeSlider:SetValueStep(0.05)
+    fontSizeSlider:SetValueStep(0.001)
     fontSizeSlider:SetValue(self.settings.fontSize)
     fontSizeSlider:SetOrientation("HORIZONTAL")
     fontSizeSlider:SetObeyStepOnDrag(true)
@@ -605,7 +605,8 @@ function CUFFrame:InitializeOptions()
     FontSizeSliderHigh:SetText("20")
 
     fontSizeSlider:SetScript("OnValueChanged", function(self, value)
-        fontSizeEditBox:SetText(string.format("%.2f", value))
+        local roundedNum = math.floor(value * 20 + 0.5) / 20        
+        fontSizeEditBox:SetText(string.format('%.2f', roundedNum))
         CUFFrame.settings.fontSize = value
 
         if CUFFrame.settings.globalEnabled == true then
