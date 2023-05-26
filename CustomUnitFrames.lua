@@ -92,10 +92,8 @@ local function NumToStrConverterMetric(value)
     return string.format("%."..outLength-formatOffset .."f"..metricForm[exponent], value / mult)
 end
 
-local function PercentAccuracy(value, accuracy)
-    local multiplier = 10 ^ accuracy
-    local rounded_number = math.floor(value * multiplier + 0.5) / multiplier
-    return string.format("%."..accuracy .."f", rounded_number)
+local function PercentAccuracy(value)
+    return string.format("%."..CUFFrame.settings.percentAccuracy .."f", value)
 end
 
 function ChangeFrameHealthBarText(self)
@@ -110,7 +108,7 @@ function ChangeFrameHealthBarText(self)
     local healthMax = UnitHealthMax(self.unit)
     local healthPercent = ""
     if healthMax > 0 then
-        healthPercent = PercentAccuracy(health / healthMax * 100, CUFFrame.settings.percentAccuracy).."%"
+        healthPercent = PercentAccuracy(health / healthMax * 100).."%"
     end
 
     if CUFFrame.settings.selectedFormat == 1 then
@@ -122,11 +120,14 @@ function ChangeFrameHealthBarText(self)
     end
 
     local resultStr = ""
-    local separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1)
-    local separatorEnd = string.sub(CUFFrame.settings.percentSeparator, 2, 2)
+    local separatorStart = ""
+    local separatorEnd = ""
 
-    if separatorEnd == "" then
-        separatorStart = separatorStart.." "
+    if string.len(CUFFrame.settings.percentSeparator) == 1 then
+        separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1).." "
+    elseif string.len(CUFFrame.settings.percentSeparator) == 2 then
+        separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1)
+        separatorEnd = string.sub(CUFFrame.settings.percentSeparator, 2, 2)
     end
 
     if CUFFrame.settings.frameHPTextEnabled[self.unit] == true then
@@ -175,7 +176,7 @@ function ChangeFrameManaBarText(self)
     local manaMax = UnitPowerMax(self.unit)
     local manaPercent = ""
     if manaMax > 0 then
-        manaPercent = PercentAccuracy(mana / manaMax * 100, CUFFrame.settings.percentAccuracy).."%"
+        manaPercent = PercentAccuracy(mana / manaMax * 100).."%"
     end
 
     if CUFFrame.settings.selectedFormat == 1 then
@@ -187,11 +188,14 @@ function ChangeFrameManaBarText(self)
     end
 
     local resultStr = ""
-    local separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1)
-    local separatorEnd = string.sub(CUFFrame.settings.percentSeparator, 2, 2)
+    local separatorStart = ""
+    local separatorEnd = ""
 
-    if separatorEnd == "" then
-        separatorStart = separatorStart.." "
+    if string.len(CUFFrame.settings.percentSeparator) == 1 then
+        separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1).." "
+    elseif string.len(CUFFrame.settings.percentSeparator) == 2 then
+        separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1)
+        separatorEnd = string.sub(CUFFrame.settings.percentSeparator, 2, 2)
     end
 
     if CUFFrame.settings.frameMPTextEnabled[self.unit] == true then
