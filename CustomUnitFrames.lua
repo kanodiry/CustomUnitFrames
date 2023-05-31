@@ -96,7 +96,7 @@ local function PercentAccuracy(value)
     return string.format("%."..CUFFrame.settings.percentAccuracy .."f", value)
 end
 
-function ChangeFrameHealthBarText(self)
+local function ChangeFrameHealthBarText(self)
     if not UnitExists(self.unit) then
         return
     end
@@ -125,7 +125,7 @@ function ChangeFrameHealthBarText(self)
 
     if string.len(CUFFrame.settings.percentSeparator) == 1 then
         separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1).." "
-    elseif string.len(CUFFrame.settings.percentSeparator) == 2 then
+    elseif string.len(CUFFrame.settings.percentSeparator) >= 2 then
         separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1)
         separatorEnd = string.sub(CUFFrame.settings.percentSeparator, 2, 2)
     end
@@ -167,7 +167,7 @@ function ChangeFrameHealthBarText(self)
     self.TextString:SetText(resultStr)
 end
 
-function ChangeFrameManaBarText(self)
+local function ChangeFrameManaBarText(self)
     if not UnitExists(self.unit) then
         return
     end
@@ -193,7 +193,7 @@ function ChangeFrameManaBarText(self)
 
     if string.len(CUFFrame.settings.percentSeparator) == 1 then
         separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1).." "
-    elseif string.len(CUFFrame.settings.percentSeparator) == 2 then
+    elseif string.len(CUFFrame.settings.percentSeparator) >= 2 then
         separatorStart = string.sub(CUFFrame.settings.percentSeparator, 1, 1)
         separatorEnd = string.sub(CUFFrame.settings.percentSeparator, 2, 2)
     end
@@ -232,7 +232,7 @@ function ChangeFrameManaBarText(self)
     self.TextString:SetText(resultStr)
 end
 
-function resetUnitFrameHealth(frame)
+local function resetUnitFrameHealth(frame)
     if not UnitExists(frame.unit) then
         return
     end
@@ -246,7 +246,7 @@ function resetUnitFrameHealth(frame)
     frame.TextString:SetText(health.." / "..healthMax)
 end
 
-function resetUnitFramePower(frame)
+local function resetUnitFramePower(frame)
     if not UnitExists(frame.unit) then
         return
     end
@@ -257,10 +257,56 @@ function resetUnitFramePower(frame)
     frame.TextString:SetText(mana.." / "..manaMax)
 end
 
+function updateFramesText()
+    if select(4, GetBuildInfo()) <= 30000 then
+        frameHealthText = {
+            [1] = PlayerFrameHealthBar,
+            [2] = TargetFrameHealthBar,
+            [3] = PetFrameHealthBar
+        }
+        frameManaText = {
+            [1] = PlayerFrameManaBar,
+            [2] = TargetFrameManaBar,
+            [3] = PetFrameManaBar
+        }
+    else
+        frameHealthText = {
+            [1] = PlayerFrameHealthBar,
+            [2] = TargetFrameHealthBar,
+            [3] = FocusFrameHealthBar,
+            [4] = PetFrameHealthBar
+        }
+        frameManaText = {
+            [1] = PlayerFrameManaBar,
+            [2] = TargetFrameManaBar,
+            [3] = FocusFrameManaBar,
+            [4] = PetFrameManaBar
+        }
+    end
+
+    for key, value in pairs(frameHealthText) do
+        if CUFFrame.settings.globalEnabled == true and 
+        CUFFrame.settings.frameEnabled[value.unit] == true then
+            ChangeFrameHealthBarText(value)
+        else
+            resetUnitFrameHealth(value)
+        end
+    end
+
+    for key, value in pairs(frameManaText) do
+        if CUFFrame.settings.globalEnabled == true and
+        CUFFrame.settings.frameEnabled[value.unit] == true then
+            ChangeFrameManaBarText(value)
+        else
+            resetUnitFramePower(value)
+        end
+    end
+end
+
 function hookTextUpdate()
     hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(self)
         if CUFFrame.settings.globalEnabled == true then
-            if CUFFrame.settings.frameEnabled[self.unit] then
+            if CUFFrame.settings.frameEnabled[self.unit] == true then
                 if self == PlayerFrameHealthBar or self == TargetFrameHealthBar 
                 or self == FocusFrameHealthBar or self == PetFrameHealthBar then
                     ChangeFrameHealthBarText(self)

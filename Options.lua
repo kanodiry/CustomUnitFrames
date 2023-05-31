@@ -91,34 +91,14 @@ function CUFFrame:InitializeOptions()
             targetFrameText:SetFontObject("GameFontNormal")
             focusFrameText:SetFontObject("GameFontNormal")
             petFrameText:SetFontObject("GameFontNormal")
-
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
         else
             playerFrameText:SetFontObject("GameFontDisable")
             targetFrameText:SetFontObject("GameFontDisable")
             focusFrameText:SetFontObject("GameFontDisable")
             petFrameText:SetFontObject("GameFontDisable")
-
-            resetUnitFrameHealth(PlayerFrameHealthBar)
-            resetUnitFramePower(PlayerFrameManaBar)
-            resetUnitFrameHealth(TargetFrameHealthBar)
-            resetUnitFramePower(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                resetUnitFrameHealth(FocusFrameHealthBar)
-                resetUnitFramePower(FocusFrameManaBar)
-            end
-            resetUnitFrameHealth(PetFrameHealthBar)
-            resetUnitFramePower(PetFrameManaBar)
         end
+
+        updateFramesText()
     end)
 
     playerFrameText = self.panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -132,13 +112,7 @@ function CUFFrame:InitializeOptions()
         self.settings.frameEnabled["player"] = playerFrameCB:GetChecked()
         self:updatePlayerCheckBoxes()
 
-        if playerFrameCB:GetChecked() == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-        else
-            resetUnitFrameHealth(PlayerFrameHealthBar)
-            resetUnitFramePower(PlayerFrameManaBar)
-        end
+        updateFramesText()
     end)
     playerFrameCB:SetChecked(self.settings.frameEnabled["player"])
 
@@ -148,7 +122,7 @@ function CUFFrame:InitializeOptions()
     playerFrameHPcurrentCB:SetSize(16, 16)
     playerFrameHPcurrentCB:SetScript("OnClick", function()
         self.settings.frameHPTextEnabled["player"] = playerFrameHPcurrentCB:GetChecked()
-        ChangeFrameHealthBarText(PlayerFrameHealthBar)
+        updateFramesText()
     end)
     playerFrameHPcurrentCB:SetChecked(self.settings.frameHPTextEnabled["player"])
 
@@ -158,7 +132,7 @@ function CUFFrame:InitializeOptions()
     playerFrameHPmaxCB:SetSize(16, 16)
     playerFrameHPmaxCB:SetScript("OnClick", function()
         self.settings.frameHPMaxTextEnabled["player"] = playerFrameHPmaxCB:GetChecked()
-        ChangeFrameHealthBarText(PlayerFrameHealthBar)
+        updateFramesText()
     end)
     playerFrameHPmaxCB:SetChecked(self.settings.frameHPMaxTextEnabled["player"])
 
@@ -168,7 +142,7 @@ function CUFFrame:InitializeOptions()
     playerFrameHPpercentCB:SetSize(16, 16)
     playerFrameHPpercentCB:SetScript("OnClick", function()
         self.settings.frameHPPercentTextEnabled["player"] = playerFrameHPpercentCB:GetChecked()
-        ChangeFrameHealthBarText(PlayerFrameHealthBar)
+        updateFramesText()
     end)
     playerFrameHPpercentCB:SetChecked(self.settings.frameHPPercentTextEnabled["player"])
 
@@ -178,7 +152,7 @@ function CUFFrame:InitializeOptions()
     playerFrameMPcurrentCB:SetSize(16, 16)
     playerFrameMPcurrentCB:SetScript("OnClick", function()
         self.settings.frameMPTextEnabled["player"] = playerFrameMPcurrentCB:GetChecked()
-        ChangeFrameManaBarText(PlayerFrameManaBar)
+        updateFramesText()
     end)
     playerFrameMPcurrentCB:SetChecked(self.settings.frameMPTextEnabled["player"])
 
@@ -188,7 +162,7 @@ function CUFFrame:InitializeOptions()
     playerFrameMPmaxCB:SetSize(16, 16)
     playerFrameMPmaxCB:SetScript("OnClick", function()
         self.settings.frameMPMaxTextEnabled["player"] = playerFrameMPmaxCB:GetChecked()
-        ChangeFrameManaBarText(PlayerFrameManaBar)
+        updateFramesText()
     end)
     playerFrameMPmaxCB:SetChecked(self.settings.frameMPMaxTextEnabled["player"])
 
@@ -198,7 +172,7 @@ function CUFFrame:InitializeOptions()
     playerFrameMPpercentCB:SetSize(16, 16)
     playerFrameMPpercentCB:SetScript("OnClick", function()
         self.settings.frameMPPercentTextEnabled["player"] = playerFrameMPpercentCB:GetChecked()
-        ChangeFrameManaBarText(PlayerFrameManaBar)
+        updateFramesText()
     end)
     playerFrameMPpercentCB:SetChecked(self.settings.frameMPPercentTextEnabled["player"])
 
@@ -213,13 +187,7 @@ function CUFFrame:InitializeOptions()
         self.settings.frameEnabled["target"] = targetFrameCB:GetChecked()
         self:updateTargetCheckBoxes()
 
-        if targetFrameCB:GetChecked() == true then
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-        else
-            resetUnitFrameHealth(TargetFrameHealthBar)
-            resetUnitFramePower(TargetFrameManaBar)
-        end
+        updateFramesText()
     end)
     targetFrameCB:SetChecked(self.settings.frameEnabled["target"])
 
@@ -229,7 +197,7 @@ function CUFFrame:InitializeOptions()
     targetFrameHPcurrentCB:SetSize(16, 16)
     targetFrameHPcurrentCB:SetScript("OnClick", function()
         self.settings.frameHPTextEnabled["target"] = targetFrameHPcurrentCB:GetChecked()
-        ChangeFrameHealthBarText(TargetFrameHealthBar)
+        updateFramesText()
     end)
     targetFrameHPcurrentCB:SetChecked(self.settings.frameHPTextEnabled["target"])
 
@@ -239,7 +207,7 @@ function CUFFrame:InitializeOptions()
     targetFrameHPmaxCB:SetSize(16, 16)
     targetFrameHPmaxCB:SetScript("OnClick", function()
         self.settings.frameHPMaxTextEnabled["target"] = targetFrameHPmaxCB:GetChecked()
-        ChangeFrameHealthBarText(TargetFrameHealthBar)
+        updateFramesText()
     end)
     targetFrameHPmaxCB:SetChecked(self.settings.frameHPMaxTextEnabled["target"])
 
@@ -249,7 +217,7 @@ function CUFFrame:InitializeOptions()
     targetFrameHPpercentCB:SetSize(16, 16)
     targetFrameHPpercentCB:SetScript("OnClick", function()
         self.settings.frameHPPercentTextEnabled["target"] = targetFrameHPpercentCB:GetChecked()
-        ChangeFrameHealthBarText(TargetFrameHealthBar)
+        updateFramesText()
     end)
     targetFrameHPpercentCB:SetChecked(self.settings.frameHPPercentTextEnabled["target"])
 
@@ -259,7 +227,7 @@ function CUFFrame:InitializeOptions()
     targetFrameMPcurrentCB:SetSize(16, 16)
     targetFrameMPcurrentCB:SetScript("OnClick", function()
         self.settings.frameMPTextEnabled["target"] = targetFrameMPcurrentCB:GetChecked()
-        ChangeFrameManaBarText(TargetFrameManaBar)
+        updateFramesText()
     end)
     targetFrameMPcurrentCB:SetChecked(self.settings.frameMPTextEnabled["target"])
 
@@ -269,7 +237,7 @@ function CUFFrame:InitializeOptions()
     targetFrameMPmaxCB:SetSize(16, 16)
     targetFrameMPmaxCB:SetScript("OnClick", function()
         self.settings.frameMPMaxTextEnabled["target"] = targetFrameMPmaxCB:GetChecked()
-        ChangeFrameManaBarText(TargetFrameManaBar)
+        updateFramesText()
     end)
     targetFrameMPmaxCB:SetChecked(self.settings.frameMPMaxTextEnabled["target"])
 
@@ -279,7 +247,7 @@ function CUFFrame:InitializeOptions()
     targetFrameMPpercentCB:SetSize(16, 16)
     targetFrameMPpercentCB:SetScript("OnClick", function()
         self.settings.frameMPPercentTextEnabled["target"] = targetFrameMPpercentCB:GetChecked()
-        ChangeFrameManaBarText(TargetFrameManaBar)
+        updateFramesText()
     end)
     targetFrameMPpercentCB:SetChecked(self.settings.frameMPPercentTextEnabled["target"])
 
@@ -294,13 +262,7 @@ function CUFFrame:InitializeOptions()
         self.settings.frameEnabled["focus"] = focusFrameCB:GetChecked()
         self:updateFocusCheckBoxes()
 
-        if focusFrameCB:GetChecked() == true then
-            ChangeFrameHealthBarText(FocusFrameHealthBar)
-            ChangeFrameManaBarText(FocusFrameManaBar)
-        else
-            resetUnitFrameHealth(FocusFrameHealthBar)
-            resetUnitFramePower(FocusFrameManaBar)
-        end
+        updateFramesText()
     end)
     focusFrameCB:SetChecked(self.settings.frameEnabled["focus"])
 
@@ -310,7 +272,7 @@ function CUFFrame:InitializeOptions()
     focusFrameHPcurrentCB:SetSize(16, 16)
     focusFrameHPcurrentCB:SetScript("OnClick", function()
         self.settings.frameHPTextEnabled["focus"] = focusFrameHPcurrentCB:GetChecked()
-        ChangeFrameHealthBarText(FocusFrameHealthBar)
+        updateFramesText()
     end)
     focusFrameHPcurrentCB:SetChecked(self.settings.frameHPTextEnabled["focus"])
 
@@ -320,7 +282,7 @@ function CUFFrame:InitializeOptions()
     focusFrameHPmaxCB:SetSize(16, 16)
     focusFrameHPmaxCB:SetScript("OnClick", function()
         self.settings.frameHPMaxTextEnabled["focus"] = focusFrameHPmaxCB:GetChecked()
-        ChangeFrameHealthBarText(FocusFrameHealthBar)
+        updateFramesText()
     end)
     focusFrameHPmaxCB:SetChecked(self.settings.frameHPMaxTextEnabled["focus"])
 
@@ -330,7 +292,7 @@ function CUFFrame:InitializeOptions()
     focusFrameHPpercentCB:SetSize(16, 16)
     focusFrameHPpercentCB:SetScript("OnClick", function()
         self.settings.frameHPPercentTextEnabled["focus"] = focusFrameHPpercentCB:GetChecked()
-        ChangeFrameHealthBarText(FocusFrameHealthBar)
+        updateFramesText()
     end)
     focusFrameHPpercentCB:SetChecked(self.settings.frameHPPercentTextEnabled["focus"])
 
@@ -340,7 +302,7 @@ function CUFFrame:InitializeOptions()
     focusFrameMPcurrentCB:SetSize(16, 16)
     focusFrameMPcurrentCB:SetScript("OnClick", function()
         self.settings.frameMPTextEnabled["focus"] = focusFrameMPcurrentCB:GetChecked()
-        ChangeFrameManaBarText(FocusFrameManaBar)
+        updateFramesText()
     end)
     focusFrameMPcurrentCB:SetChecked(self.settings.frameMPTextEnabled["focus"])
 
@@ -350,7 +312,7 @@ function CUFFrame:InitializeOptions()
     focusFrameMPmaxCB:SetSize(16, 16)
     focusFrameMPmaxCB:SetScript("OnClick", function()
         self.settings.frameMPMaxTextEnabled["focus"] = focusFrameMPmaxCB:GetChecked()
-        ChangeFrameManaBarText(FocusFrameManaBar)
+        updateFramesText()
     end)
     focusFrameMPmaxCB:SetChecked(self.settings.frameMPMaxTextEnabled["focus"])
 
@@ -360,7 +322,7 @@ function CUFFrame:InitializeOptions()
     focusFrameMPpercentCB:SetSize(16, 16)
     focusFrameMPpercentCB:SetScript("OnClick", function()
         self.settings.frameMPPercentTextEnabled["focus"] = focusFrameMPpercentCB:GetChecked()
-        ChangeFrameManaBarText(FocusFrameManaBar)
+        updateFramesText()
     end)
     focusFrameMPpercentCB:SetChecked(self.settings.frameMPPercentTextEnabled["focus"])
 
@@ -391,13 +353,7 @@ function CUFFrame:InitializeOptions()
         self.settings.frameEnabled["pet"] = petFrameCB:GetChecked()
         self:updatePetCheckBoxes()
 
-        if petFrameCB:GetChecked() == true then
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        else
-            resetUnitFrameHealth(PetFrameHealthBar)
-            resetUnitFramePower(PetFrameManaBar)
-        end
+        updateFramesText()
     end)
     petFrameCB:SetChecked(self.settings.frameEnabled["pet"])
 
@@ -407,7 +363,7 @@ function CUFFrame:InitializeOptions()
     petFrameHPcurrentCB:SetSize(16, 16)
     petFrameHPcurrentCB:SetScript("OnClick", function()
         self.settings.frameHPTextEnabled["pet"] = petFrameHPcurrentCB:GetChecked()
-        ChangeFrameHealthBarText(PetFrameHealthBar)
+        updateFramesText()
     end)
     petFrameHPcurrentCB:SetChecked(self.settings.frameHPTextEnabled["pet"])
 
@@ -417,7 +373,7 @@ function CUFFrame:InitializeOptions()
     petFrameHPmaxCB:SetSize(16, 16)
     petFrameHPmaxCB:SetScript("OnClick", function()
         self.settings.frameHPMaxTextEnabled["pet"] = petFrameHPmaxCB:GetChecked()
-        ChangeFrameHealthBarText(PetFrameHealthBar)
+        updateFramesText()
     end)
     petFrameHPmaxCB:SetChecked(self.settings.frameHPMaxTextEnabled["pet"])
 
@@ -427,7 +383,7 @@ function CUFFrame:InitializeOptions()
     petFrameHPpercentCB:SetSize(16, 16)
     petFrameHPpercentCB:SetScript("OnClick", function()
         self.settings.frameHPPercentTextEnabled["pet"] = petFrameHPpercentCB:GetChecked()
-        ChangeFrameHealthBarText(PetFrameHealthBar)
+        updateFramesText()
     end)
     petFrameHPpercentCB:SetChecked(self.settings.frameHPPercentTextEnabled["pet"])
 
@@ -437,7 +393,7 @@ function CUFFrame:InitializeOptions()
     petFrameMPcurrentCB:SetSize(16, 16)
     petFrameMPcurrentCB:SetScript("OnClick", function()
         self.settings.frameMPTextEnabled["pet"] = petFrameMPcurrentCB:GetChecked()
-        ChangeFrameManaBarText(PetFrameManaBar)
+        updateFramesText()
     end)
     petFrameMPcurrentCB:SetChecked(self.settings.frameMPTextEnabled["pet"])
 
@@ -447,7 +403,7 @@ function CUFFrame:InitializeOptions()
     petFrameMPmaxCB:SetSize(16, 16)
     petFrameMPmaxCB:SetScript("OnClick", function()
         self.settings.frameMPMaxTextEnabled["pet"] = petFrameMPmaxCB:GetChecked()
-        ChangeFrameManaBarText(PetFrameManaBar)
+        updateFramesText()
     end)
     petFrameMPmaxCB:SetChecked(self.settings.frameMPMaxTextEnabled["pet"])
 
@@ -457,7 +413,7 @@ function CUFFrame:InitializeOptions()
     petFrameMPpercentCB:SetSize(16, 16)
     petFrameMPpercentCB:SetScript("OnClick", function()
         self.settings.frameMPPercentTextEnabled["pet"] = petFrameMPpercentCB:GetChecked()
-        ChangeFrameManaBarText(PetFrameManaBar)
+        updateFramesText()
     end)
     petFrameMPpercentCB:SetChecked(self.settings.frameMPPercentTextEnabled["pet"])
 
@@ -577,18 +533,7 @@ function CUFFrame:InitializeOptions()
             FontDropDownText:SetFont("Fonts/FRIZQT__.ttf", 12)
         end
 
-        if CUFFrame.settings.globalEnabled == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        end
+        updateFramesText()
 
         CloseDropDownMenus()
     end
@@ -596,12 +541,12 @@ function CUFFrame:InitializeOptions()
     fontSizeSlider = CreateFrame("Slider", "FontSizeSlider", self.panel_visual, "OptionsSliderTemplate")
     fontSizeSlider:SetSize(180, 20)
     fontSizeSlider:SetPoint("TOPLEFT", fontDropDownMenu, 270, 0)
-    fontSizeSlider:SetMinMaxValues(1, 20)
+    fontSizeSlider:SetMinMaxValues(6, 20)
     fontSizeSlider:SetValueStep(0.001)
     fontSizeSlider:SetValue(self.settings.fontSize)
     fontSizeSlider:SetOrientation("HORIZONTAL")
     fontSizeSlider:SetObeyStepOnDrag(true)
-    FontSizeSliderLow:SetText("1")
+    FontSizeSliderLow:SetText("6")
     FontSizeSliderHigh:SetText("20")
 
     fontSizeSlider:SetScript("OnValueChanged", function(self, value)
@@ -609,18 +554,7 @@ function CUFFrame:InitializeOptions()
         fontSizeEditBox:SetText(string.format('%.2f', roundedNum))
         CUFFrame.settings.fontSize = value
 
-        if CUFFrame.settings.globalEnabled == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        end
+        updateFramesText()
     end)
 
     fontSizeEditBox = CreateFrame("EditBox", "FontSizeEditBox", self.panel_visual, "InputBoxTemplate")
@@ -695,18 +629,7 @@ function CUFFrame:InitializeOptions()
             showBigNumbersDecimalsCB.Text:SetFontObject("GameFontDisable")
         end
 
-        if CUFFrame.settings.globalEnabled == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        end
+        updateFramesText()
 
         CloseDropDownMenus()
     end
@@ -728,18 +651,7 @@ function CUFFrame:InitializeOptions()
             bigNumbersLengthValue:SetFontObject("GameFontDisable")
         end
 
-        if CUFFrame.settings.globalEnabled == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        end
+        updateFramesText()
     end)
 
     bigNumbersLengthSlider = CreateFrame("Slider", "BigNumbersLengthSlider", self.panel_visual, "OptionsSliderTemplate")
@@ -757,18 +669,7 @@ function CUFFrame:InitializeOptions()
         bigNumbersLengthValue:SetText(tostring(value))
         CUFFrame.settings.bigNumbersLength = value
 
-        if CUFFrame.settings.globalEnabled == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        end
+        updateFramesText()
     end)
 
     bigNumbersLengthTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -855,18 +756,7 @@ function CUFFrame:InitializeOptions()
         CUFFrame.settings.bigNumbers = newValue
         UIDropDownMenu_SetText(bigNumbersDropDown, bigNumber)
 
-        if CUFFrame.settings.globalEnabled == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        end
+        updateFramesText()
 
         CloseDropDownMenus()
     end
@@ -886,18 +776,7 @@ function CUFFrame:InitializeOptions()
         percentAccuracyValue:SetText(tostring(value))
         CUFFrame.settings.percentAccuracy = value
 
-        if CUFFrame.settings.globalEnabled == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        end
+        updateFramesText()
     end)
 
     percentAccuracyTitle = self.panel_visual:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -919,22 +798,12 @@ function CUFFrame:InitializeOptions()
     percentSeparatorEditBox:SetAutoFocus(false)
     percentSeparatorEditBox:SetText(CUFFrame.settings.percentSeparator)
     percentSeparatorEditBox:SetCursorPosition(0)
+    percentSeparatorEditBox:SetMaxLetters(2)
     percentSeparatorEditBox:SetScript("OnEnterPressed", function(self)
         CUFFrame.settings.percentSeparator = self:GetText()
         self:ClearFocus()
 
-        if CUFFrame.settings.globalEnabled == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        end
+        updateFramesText()
     end)
 
     showPercentForSmallPowerCB = CreateFrame("CheckButton", "ShowPercentForSmallPowerCB", self.panel_visual, "InterfaceOptionsCheckButtonTemplate")
@@ -944,18 +813,7 @@ function CUFFrame:InitializeOptions()
     showPercentForSmallPowerCB:SetScript("OnClick", function()
         self.settings.showPercentForSmallNumbers = showPercentForSmallPowerCB:GetChecked()
 
-        if CUFFrame.settings.globalEnabled == true then
-            ChangeFrameHealthBarText(PlayerFrameHealthBar)
-            ChangeFrameManaBarText(PlayerFrameManaBar)
-            ChangeFrameHealthBarText(TargetFrameHealthBar)
-            ChangeFrameManaBarText(TargetFrameManaBar)
-            if select(4, GetBuildInfo()) >= 30000 then
-                ChangeFrameHealthBarText(FocusFrameHealthBar)
-                ChangeFrameManaBarText(FocusFrameManaBar)
-            end
-            ChangeFrameHealthBarText(PetFrameHealthBar)
-            ChangeFrameManaBarText(PetFrameManaBar)
-        end
+        updateFramesText()
     end)
 
     if select(4, GetBuildInfo()) <= 30000 then
@@ -966,21 +824,9 @@ function CUFFrame:InitializeOptions()
         showPercentForClassicPlayersCB:SetScript("OnClick", function()
             self.settings.showPercentForClassicPlayers = showPercentForClassicPlayersCB:GetChecked()
 
-            if CUFFrame.settings.globalEnabled == true then
-                ChangeFrameHealthBarText(PlayerFrameHealthBar)
-                ChangeFrameManaBarText(PlayerFrameManaBar)
-                ChangeFrameHealthBarText(TargetFrameHealthBar)
-                ChangeFrameManaBarText(TargetFrameManaBar)
-                if select(4, GetBuildInfo()) >= 30000 then
-                    ChangeFrameHealthBarText(FocusFrameHealthBar)
-                    ChangeFrameManaBarText(FocusFrameManaBar)
-                end
-                ChangeFrameHealthBarText(PetFrameHealthBar)
-                ChangeFrameManaBarText(PetFrameManaBar)
-            end
+            updateFramesText()
         end)
     end
-
 end
 
 function CUFFrame:updatePlayerCheckBoxes()
