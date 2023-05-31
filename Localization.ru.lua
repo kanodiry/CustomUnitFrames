@@ -42,3 +42,28 @@ L.showPercSmallNumbers = "Показывать % для малых чисел (�
 L.showPercentClassicPlayers = "Показывать % Здоровья Игроков в мире"
 
 L.thousandLetter = "T"
+
+L.slhTitle = "Список команд CustomUnitFrames:"
+L.slhExampleText = "Пример:"
+L.slhHelpHint = " - Показать это сообщение"
+L.slhSettingsHint = " - Открыть параметры"
+
+L.slhEnableAddonHint = " - Вкл/Выкл Аддон"
+L.slhEnablePlayerFrameHint = " - Вкл/Выкл изменение текста рамки Игрока"
+L.slhEnableTargetFrameHint = " - Вкл/Выкл изменение текста рамки Цели"
+L.slhEnableFocusFrameHint = " - Вкл/Выкл изменение текста рамки Запомненной цели"
+L.slhEnablePetFrameHint = " - Вкл/Выкл изменение текста рамки питомца"
+
+L.enabled = "ВКЛЮЧЕНО"
+L.disabled = "ВЫКЛЮЧЕНО"
+
+L.enableAddonResponse = "CustomUnitFrames "
+L.enablePlayerFrameTextResponse = "Изменение текста рамки Игрока "
+L.enableTargetFrameTextResponse = "Изменение текста рамки Цели "
+L.enableFocusFrameTextResponse = "Изменение текста рамки Запомненной цели "
+L.enablePetFrameTextResponse = "Изменение текста рамки Питомца "
+
+L.nowIs = "теперь "
+L.alreadyIs = "уже "
+
+L.commandNotFound = "Неизвестная команда, наберите /cuf help для списка команд"
