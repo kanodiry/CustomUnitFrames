@@ -63,7 +63,7 @@ L.enableTargetFrameTextResponse = "Изменение текста рамки Ц
 L.enableFocusFrameTextResponse = "Изменение текста рамки Запомненной цели "
 L.enablePetFrameTextResponse = "Изменение текста рамки Питомца "
 
-L.nowIs = "теперь "
-L.alreadyIs = "уже "
+L.now = "теперь "
+L.already = "уже "
 
 L.commandNotFound = "Неизвестная команда, наберите /cuf help для списка команд"

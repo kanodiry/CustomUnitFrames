@@ -64,14 +64,14 @@ local L = {
     enabled = "ENABLED",
     disabled = "DISABLED",
 
-    enableAddonResponse = "CustomUnitFrames ",
-    enablePlayerFrameTextResponse = "Custom Player Frame text ",
-    enableTargetFrameTextResponse = "Custom Target Frame text ",
-    enableFocusFrameTextResponse = "Custom Focus Frame text ",
-    enablePetFrameTextResponse = "Custom Pet Frame text ",
+    enableAddonResponse = "CustomUnitFrames is ",
+    enablePlayerFrameTextResponse = "Custom Player Frame text is ",
+    enableTargetFrameTextResponse = "Custom Target Frame text is ",
+    enableFocusFrameTextResponse = "Custom Focus Frame text is ",
+    enablePetFrameTextResponse = "Custom Pet Frame text is ",
 
-    nowIs = "now is ",
-    alreadyIs = "already is ",
+    now = "now ",
+    already = "already ",
 
     commandNotFound = "Command not found, try /cuf help for list of commands",
 }
