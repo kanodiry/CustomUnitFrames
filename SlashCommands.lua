@@ -10,9 +10,6 @@ SlashCmdList.CUF = function(msg, editBox)
     local filler = "    "
 
     if msg == "" or msg == "show" then
-        if select(4, GetBuildInfo()) < 30402 then
-            InterfaceOptionsFrame_Show()
-        end
         InterfaceOptionsFrame_OpenToCategory("Custom Unit Frames")
     elseif msg == "help" then
         print(white.. L.slhTitle)
