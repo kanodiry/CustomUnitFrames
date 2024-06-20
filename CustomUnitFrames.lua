@@ -107,6 +107,8 @@ local function ChangeFrameHealthBarText(self)
     local health = UnitHealth(self.unit)
     local healthMax = UnitHealthMax(self.unit)
     local healthPercent = ""
+    local CVARstatusText = C_CVar.GetCVar("statusTextDisplay")
+
     if healthMax > 0 then
         healthPercent = PercentAccuracy(health / healthMax * 100).."%"
     end
@@ -140,30 +142,56 @@ local function ChangeFrameHealthBarText(self)
             resultStr = healthMaxStr
         end
     end
-    if not (self.unit == "target" and UnitIsPlayer(self.unit) and healthMax == 100 and CUFFrame.settings.showPercentForClassicPlayers == false) then
-        if CUFFrame.settings.frameHPPercentTextEnabled[self.unit] == true then
-            if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
-                if resultStr ~= "" then
-                    resultStr = resultStr.." "..
-                    separatorStart..healthPercent..separatorEnd
-                else
-                    resultStr = healthPercent
+    if CVARstatusText == "NUMERIC" then
+        if not (self.unit == "target" and UnitIsPlayer(self.unit) and healthMax == 100 and CUFFrame.settings.showPercentForClassicPlayers == false) then
+            if CUFFrame.settings.frameHPPercentTextEnabled[self.unit] == true then
+                if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+                    if resultStr ~= "" then
+                        resultStr = resultStr.." "..
+                        separatorStart..healthPercent..separatorEnd
+                    else
+                        resultStr = healthPercent
+                    end
                 end
             end
         end
     end
+    if CVARstatusText == "BOTH" then
+        if CUFFrame.settings.frameHPPercentTextEnabled[self.unit] == true then
+            self.LeftText:Show()
+        else
+            self.LeftText:Hide()
+        end
+    end
+    if CVARstatusText == "PERCENT" then
+        resultStr = healthPercent
+    end
 
     if CUFFrame.settings.selectedFont == "skurri" then
         self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.LeftText:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.RightText:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
     elseif CUFFrame.settings.selectedFont == "morpheus" then
         self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.LeftText:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.RightText:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
     elseif CUFFrame.settings.selectedFont == "frizqt" then
         self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.LeftText:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.RightText:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
     else
         self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+        self.LeftText:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+        self.RightText:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
     end
 
-    self.TextString:SetText(resultStr)
+    if CVARstatusText == "PERCENT" or CVARstatusText == "NUMERIC" then
+        self.TextString:SetText(resultStr)
+    else if CVARstatusText == "BOTH" then
+            self.LeftText:SetText(healthPercent)
+            self.RightText:SetText(resultStr)
+        end
+    end
 end
 
 local function ChangeFrameManaBarText(self)
@@ -174,6 +202,8 @@ local function ChangeFrameManaBarText(self)
     local mana = UnitPower(self.unit)
     local manaMax = UnitPowerMax(self.unit)
     local manaPercent = ""
+    local CVARstatusText = C_CVar.GetCVar("statusTextDisplay")
+
     if manaMax > 0 then
         manaPercent = PercentAccuracy(mana / manaMax * 100).."%"
     end
@@ -207,28 +237,54 @@ local function ChangeFrameManaBarText(self)
             resultStr = manaMaxStr
         end
     end
-    if CUFFrame.settings.frameMPPercentTextEnabled[self.unit] == true then
-        if manaMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
-            if resultStr ~= "" then
-                resultStr = resultStr.." "..
-                separatorStart..manaPercent..separatorEnd
-            else
-                resultStr = manaPercent
+    if CVARstatusText == "NUMERIC" then
+        if CUFFrame.settings.frameMPPercentTextEnabled[self.unit] == true then
+            if manaMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+                if resultStr ~= "" then
+                    resultStr = resultStr.." "..
+                    separatorStart..manaPercent..separatorEnd
+                else
+                    resultStr = manaPercent
+                end
             end
         end
+    end
+    if CVARstatusText == "BOTH" then
+        if CUFFrame.settings.frameMPPercentTextEnabled[self.unit] == true then
+            self.LeftText:Show()
+        else
+            self.LeftText:Hide()
+        end
+    end
+    if CVARstatusText == "PERCENT" then
+        resultStr = manaPercent
     end
 
     if CUFFrame.settings.selectedFont == "skurri" then
         self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.LeftText:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.RightText:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
     elseif CUFFrame.settings.selectedFont == "morpheus" then
         self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.LeftText:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.RightText:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
     elseif CUFFrame.settings.selectedFont == "frizqt" then
         self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.LeftText:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        self.RightText:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
     else
         self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+        self.LeftText:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+        self.RightText:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
     end
 
-    self.TextString:SetText(resultStr)
+    if CVARstatusText == "PERCENT" or CVARstatusText == "NUMERIC" then
+        self.TextString:SetText(resultStr)
+    else if CVARstatusText == "BOTH" then
+            self.LeftText:SetText(manaPercent)
+            self.RightText:SetText(resultStr)
+        end
+    end
 end
 
 local function resetUnitFrameHealth(frame)
@@ -241,8 +297,13 @@ local function resetUnitFrameHealth(frame)
 
     local health = UnitHealth(frame.unit)
     local healthMax = UnitHealthMax(frame.unit)
+    local healthPercent = string.format("%.0f", (health / healthMax * 100)).."%"
     frame.TextString:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+    frame.LeftText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+    frame.RightText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
     frame.TextString:SetText(health.." / "..healthMax)
+    frame.LeftText:SetText(healthPercent)
+    frame.RightText:SetText(health)
 end
 
 local function resetUnitFramePower(frame)
@@ -252,8 +313,13 @@ local function resetUnitFramePower(frame)
 
     local mana = UnitPower(frame.unit)
     local manaMax = UnitPowerMax(frame.unit)
+    local manaPercent = string.format("%.0f", (mana / manaMax * 100)).."%"
     frame.TextString:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+    frame.LeftText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+    frame.RightText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
     frame.TextString:SetText(mana.." / "..manaMax)
+    frame.LeftText:SetText(manaPercent)
+    frame.RightText:SetText(mana)
 end
 
 function updateFramesText()
