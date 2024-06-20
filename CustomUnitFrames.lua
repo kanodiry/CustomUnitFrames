@@ -140,8 +140,7 @@ local function ChangeFrameHealthBarText(self)
             resultStr = healthMaxStr
         end
     end
-    if self.unit == "target" and UnitIsPlayer(self.unit) and healthMax == 100 and CUFFrame.settings.showPercentForClassicPlayers == false then
-    else
+    if not (self.unit == "target" and UnitIsPlayer(self.unit) and healthMax == 100 and CUFFrame.settings.showPercentForClassicPlayers == false) then
         if CUFFrame.settings.frameHPPercentTextEnabled[self.unit] == true then
             if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
                 if resultStr ~= "" then
