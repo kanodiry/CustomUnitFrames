@@ -295,15 +295,24 @@ local function resetUnitFrameHealth(frame)
         return
     end
 
+    local CVARstatusText = C_CVar.GetCVar("statusTextDisplay")
     local health = UnitHealth(frame.unit)
     local healthMax = UnitHealthMax(frame.unit)
     local healthPercent = string.format("%.0f", (health / healthMax * 100)).."%"
     frame.TextString:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
     frame.LeftText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
     frame.RightText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
-    frame.TextString:SetText(health.." / "..healthMax)
-    frame.LeftText:SetText(healthPercent)
-    frame.RightText:SetText(health)
+
+    if CVARstatusText == "NUMERIC" then
+        frame.TextString:SetText(health.." / "..healthMax)
+    end
+    if CVARstatusText == "BOTH" then
+        frame.LeftText:SetText(healthPercent)
+        frame.RightText:SetText(health)
+    end
+    if CVARstatusText == "PERCENT" then
+        frame.TextString:SetText(healthPercent)
+    end
 end
 
 local function resetUnitFramePower(frame)
@@ -311,15 +320,24 @@ local function resetUnitFramePower(frame)
         return
     end
 
+    local CVARstatusText = C_CVar.GetCVar("statusTextDisplay")
     local mana = UnitPower(frame.unit)
     local manaMax = UnitPowerMax(frame.unit)
     local manaPercent = string.format("%.0f", (mana / manaMax * 100)).."%"
     frame.TextString:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
     frame.LeftText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
     frame.RightText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
-    frame.TextString:SetText(mana.." / "..manaMax)
-    frame.LeftText:SetText(manaPercent)
-    frame.RightText:SetText(mana)
+
+    if CVARstatusText == "NUMERIC" then
+        frame.TextString:SetText(mana.." / "..manaMax)
+    end
+    if CVARstatusText == "BOTH" then
+        frame.LeftText:SetText(manaPercent)
+        frame.RightText:SetText(mana)
+    end
+    if CVARstatusText == "PERCENT" then
+        frame.TextString:SetText(manaPercent)
+    end
 end
 
 function updateFramesText()
