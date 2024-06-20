@@ -107,6 +107,8 @@ local function ChangeFrameHealthBarText(self)
     local health = UnitHealth(self.unit)
     local healthMax = UnitHealthMax(self.unit)
     local healthPercent = ""
+    local CVARstatusText = C_CVar.GetCVar("statusTextDisplay")
+
     if healthMax > 0 then
         healthPercent = PercentAccuracy(health / healthMax * 100).."%"
     end
@@ -140,6 +142,7 @@ local function ChangeFrameHealthBarText(self)
             resultStr = healthMaxStr
         end
     end
+<<<<<<< HEAD
     if not (self.unit == "target" and UnitIsPlayer(self.unit) and healthMax == 100 and CUFFrame.settings.showPercentForClassicPlayers == false) then
         if CUFFrame.settings.frameHPPercentTextEnabled[self.unit] == true then
             if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
@@ -148,22 +151,53 @@ local function ChangeFrameHealthBarText(self)
                     separatorStart..healthPercent..separatorEnd
                 else
                     resultStr = healthPercent
+=======
+
+    if CVARstatusText == "NUMERIC" then
+        if not (self.unit == "target" and UnitIsPlayer(self.unit) and healthMax == 100 and CUFFrame.settings.showPercentForClassicPlayers == false) then
+            if CUFFrame.settings.frameHPPercentTextEnabled[self.unit] == true then
+                if healthMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+                    if resultStr ~= "" then
+                        resultStr = resultStr.." "..
+                        separatorStart..healthPercent..separatorEnd
+                    else
+                        resultStr = healthPercent
+                    end
+>>>>>>> 90db03596f53c73e8ca338d3e151bcae23424688
                 end
             end
         end
     end
 
-    if CUFFrame.settings.selectedFont == "skurri" then
-        self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
-    elseif CUFFrame.settings.selectedFont == "morpheus" then
-        self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
-    elseif CUFFrame.settings.selectedFont == "frizqt" then
-        self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
-    else
-        self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+    if CVARstatusText == "PERCENT" then
+        resultStr = healthPercent
     end
 
-    self.TextString:SetText(resultStr)
+    if CUFFrame.settings.selectedFont == "skurri" then
+        self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextLeft"]:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextRight"]:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+    elseif CUFFrame.settings.selectedFont == "morpheus" then
+        self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextLeft"]:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextRight"]:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+    elseif CUFFrame.settings.selectedFont == "frizqt" then
+        self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextLeft"]:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextRight"]:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+    else
+        self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextLeft"]:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextRight"]:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+    end
+
+    if CVARstatusText == "PERCENT" or CVARstatusText == "NUMERIC" then
+        self.TextString:SetText(resultStr)
+    else if CVARstatusText == "BOTH" then
+            _G[self:GetName().."TextLeft"]:SetText(healthPercent)
+            _G[self:GetName().."TextRight"]:SetText(resultStr)
+        end
+    end
 end
 
 local function ChangeFrameManaBarText(self)
@@ -174,6 +208,8 @@ local function ChangeFrameManaBarText(self)
     local mana = UnitPower(self.unit)
     local manaMax = UnitPowerMax(self.unit)
     local manaPercent = ""
+    local CVARstatusText = C_CVar.GetCVar("statusTextDisplay")
+
     if manaMax > 0 then
         manaPercent = PercentAccuracy(mana / manaMax * 100).."%"
     end
@@ -207,28 +243,49 @@ local function ChangeFrameManaBarText(self)
             resultStr = manaMaxStr
         end
     end
-    if CUFFrame.settings.frameMPPercentTextEnabled[self.unit] == true then
-        if manaMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
-            if resultStr ~= "" then
-                resultStr = resultStr.." "..
-                separatorStart..manaPercent..separatorEnd
-            else
-                resultStr = manaPercent
+
+    if CVARstatusText == "NUMERIC" then
+        if CUFFrame.settings.frameMPPercentTextEnabled[self.unit] == true then
+            if manaMax > 150 or CUFFrame.settings.showPercentForSmallNumbers == true then
+                if resultStr ~= "" then
+                    resultStr = resultStr.." "..
+                    separatorStart..manaPercent..separatorEnd
+                else
+                    resultStr = manaPercent
+                end
             end
         end
     end
 
-    if CUFFrame.settings.selectedFont == "skurri" then
-        self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
-    elseif CUFFrame.settings.selectedFont == "morpheus" then
-        self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
-    elseif CUFFrame.settings.selectedFont == "frizqt" then
-        self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
-    else
-        self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+    if CVARstatusText == "PERCENT" then
+        resultStr = manaPercent
     end
 
-    self.TextString:SetText(resultStr)
+    if CUFFrame.settings.selectedFont == "skurri" then
+        self.TextString:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextLeft"]:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextRight"]:SetFont("Fonts/skurri.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+    elseif CUFFrame.settings.selectedFont == "morpheus" then
+        self.TextString:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextLeft"]:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextRight"]:SetFont("Fonts/MORPHEUS.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+    elseif CUFFrame.settings.selectedFont == "frizqt" then
+        self.TextString:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextLeft"]:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextRight"]:SetFont("Fonts/FRIZQT__.ttf", CUFFrame.settings.fontSize, "OUTLINE")
+    else
+        self.TextString:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextLeft"]:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+        _G[self:GetName().."TextRight"]:SetFont("Fonts/ARIALN.TTF", CUFFrame.settings.fontSize, "OUTLINE")
+    end
+
+    if CVARstatusText == "PERCENT" or CVARstatusText == "NUMERIC" then
+        self.TextString:SetText(resultStr)
+    else if CVARstatusText == "BOTH" then
+            _G[self:GetName().."TextLeft"]:SetText(manaPercent)
+            _G[self:GetName().."TextRight"]:SetText(resultStr)
+        end
+    end
 end
 
 local function resetUnitFrameHealth(frame)
