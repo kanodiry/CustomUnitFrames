@@ -56,19 +56,19 @@ end
 
 local function NumToStrConverterBlizzard(value)
     if value < CUFFrame.settings.bigNumbers then
-        return tostring(value)
+        return tostring(BreakUpLargeNumbers(value))
     end
 
     if value < 100000000 then
-        return tostring(math.floor(value / 1e3)..Addon.L.thousandLetter)
+        return tostring(BreakUpLargeNumbers(math.floor(value / 1e3))..Addon.L.thousandLetter)
     else
-        return tostring(math.floor(value / 1e6).."M")
+        return tostring(BreakUpLargeNumbers(math.floor(value / 1e6)).."M")
     end
 end
 
 local function NumToStrConverterMetric(value)
     if value < CUFFrame.settings.bigNumbers then
-        return tostring(value)
+        return tostring(BreakUpLargeNumbers(value))
     end
 
     local metricForm = {[3] = "K", [6] = "M", [9] = "B"}
@@ -89,7 +89,9 @@ local function NumToStrConverterMetric(value)
         formatOffset = outLength
     end
 
-    return string.format("%."..outLength-formatOffset .."f"..metricForm[exponent], value / mult)
+    local resultString = format("%."..outLength-formatOffset .."f"..metricForm[exponent], value / mult) 
+
+    return gsub(resultString, "%p", ",")
 end
 
 local function PercentAccuracy(value)
@@ -288,7 +290,7 @@ local function ChangeFrameManaBarText(self)
 end
 
 local function resetUnitFrameHealth(frame)
-    if not UnitExists(frame.unit) then
+    --[[ if not UnitExists(frame.unit) then
         return
     end
     if UnitIsDeadOrGhost(frame.unit) and frame.unit ~= "player" then
@@ -312,11 +314,16 @@ local function resetUnitFrameHealth(frame)
     end
     if CVARstatusText == "PERCENT" then
         frame.TextString:SetText(healthPercent)
-    end
+    end ]]
+    frame.TextString:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+    frame.LeftText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+    frame.RightText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+
+    TextStatusBar_UpdateTextString(frame)
 end
 
 local function resetUnitFramePower(frame)
-    if not UnitExists(frame.unit) then
+    --[[ if not UnitExists(frame.unit) then
         return
     end
 
@@ -337,7 +344,13 @@ local function resetUnitFramePower(frame)
     end
     if CVARstatusText == "PERCENT" then
         frame.TextString:SetText(manaPercent)
-    end
+    end ]]
+
+    frame.TextString:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+    frame.LeftText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+    frame.RightText:SetFont(CUFFrame.settings.defaultFrameFont, CUFFrame.settings.defaultFrameFontSize, "OUTLINE")
+    
+    TextStatusBar_UpdateTextString(frame)
 end
 
 function updateFramesText()
